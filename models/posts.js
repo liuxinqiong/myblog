@@ -143,6 +143,52 @@ module.exports = {
             .sort({_id: -1})
             .exec();
     },
+    getTags:function(isLogin){
+        var query={tags:{"$ne":""}};
+        if(!isLogin){
+            // 非登录只能看非私有
+            query.isPrivate=false||undefined;
+        }
+        return Post
+            .distinct('tags',query)
+            .exec();
+    },
+    getPostByTags:function (tags,page,isLogin) {
+        var query={tags:tags};
+        if(!isLogin){
+            // 非登录只能看非私有
+            query.isPrivate=false||undefined;
+        }
+        if (!page) {
+            page = 1;
+        }
+        return Post
+            .find(query,{
+                skip: (page - 1) * 5,
+                limit: 5
+            })
+            .populate({path: 'author', model: 'User'})
+            .sort({_id: -1})
+            .addCreatedAt()
+            .addCommentsCount()
+            .contentToHtml()
+            .contentToMark()
+            .exec();
+
+    },
+    getCountByTags:function getCount(tags,isLogin) {
+        var query = {};
+        if (tags) {
+            query.tags = tags;
+        }
+        if(!isLogin){
+            // 非登录只能看非私有
+            query.isPrivate=false||undefined;
+        }
+        return Post
+            .count(query)
+            .exec();
+    },
     // 通过文章 id 给 pv 加 1
     incPv: function incPv(postId) {
         return Post

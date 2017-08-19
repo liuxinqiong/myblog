@@ -1,0 +1,10 @@
+<%- include('header') %>
+
+<div id="tagscloud">
+    <% tags.forEach(function (tag) { %>
+        <a href="/posts/tags/<%=tag%>" class="tagc1"><%=tag%></a>
+    <% }) %>
+</div>
+
+<script src="/lib/tagscloud.js"></script>
+<%- include('footer') %>

@@ -24,6 +24,11 @@ $(document).ready(function () {
             'z-index':10
         });
     }
+    fixAutoCompleteContainerPos();
+
+    $(document.body).on('click',function () {
+        $container.html('');
+    })
 
     $(window).on('resize',function(){
         fixAutoCompleteContainerPos();
@@ -50,7 +55,6 @@ $(document).ready(function () {
                 html+='<li><a href="/posts/'+target._id+'">'+target.title+'</a></li>'
             }
             html+='</ul>';
-            fixAutoCompleteContainerPos();
             $container.html(html);
         });
         request=ajaxUtil.send();

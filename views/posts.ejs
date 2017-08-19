@@ -6,7 +6,7 @@
         <%- include('components/post-content', { post: post }) %>
         <% }) %>
         <!-- Pager -->
-        <div id="post-pager" data-total="<%= totalpage %>" data-page="<%= page %>" data-keyword="<%= keyword %>" data-author="<%= author %>">
+        <div id="post-pager" data-total="<%= totalpage %>" data-page="<%= page %>" data-keyword="<%= keyword %>" data-tags="<%= tags %>" data-author="<%= author %>">
             <ul class="pagination">
 
             </ul>
@@ -22,6 +22,7 @@
         var page=pageNav.data("page");
         var keyword=pageNav.data("keyword");
         var author=pageNav.data("author");
+        var tags=pageNav.data("tags");
         $("#post-pager").createPage({
             totalPage: total,
             currPage: page,
@@ -31,6 +32,8 @@
                     url+="&keyword="+keyword;
                 }else if(author.toString().length>0){
                     url+="&author="+author;
+                }else if(tags.toString().length>0){
+                    url+="&tags="+tags;
                 }
                 window.location.href=url;
             }

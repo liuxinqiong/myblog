@@ -1,22 +1,23 @@
 @import "component/variables.less";
 @import "component/mixins.less";
 
-html{
+html {
   line-height: 1.15;
   font-size: inherit;
 }
+
 // 全局
 body {
   .serif-font;
   font-size: 1rem;
-  font-weight:400;
+  font-weight: 400;
   color: @gray-dark;
   -webkit-tap-highlight-color: @theme-primary;
   line-height: 1.5;
 }
 
 // 分页
-.pagination{
+.pagination {
   font-size: 12px;
   .sans-serif-font;
 }
@@ -149,33 +150,33 @@ blockquote {
     text-transform: uppercase;
     font-size: 12px;
     padding: 13px;
-    border:none;
-    &:active,&:focus{
-      border:none;
-      outline:0;
+    border: none;
+    &:active, &:focus {
+      border: none;
+      outline: 0;
     }
   }
-  .navbar-toggler-right{
+  .navbar-toggler-right {
     position: absolute;
     right: 1rem;
   }
   .navbar-nav {
-    padding:5px;
+    padding: 5px;
     > li.nav-item {
       > a {
         text-transform: uppercase;
         font-size: 12px;
         font-weight: 800;
         letter-spacing: 1px;
-        &:active,&:focus{
+        &:active, &:focus {
           background: transparent;
         }
       }
     }
   }
-  .sub-dropdown-menu{
-    top:76px;
-    border:none;
+  .sub-dropdown-menu {
+    top: 76px;
+    border: none;
     > li.nav-item {
       > a {
         text-transform: uppercase;
@@ -271,7 +272,7 @@ blockquote {
 @inlcude background-cover;
   // NOTE: Background images are set within the HTML using inline CSS!
   margin-bottom: 50px;
-  .avatar-container{
+  .avatar-container {
     padding: 100px 0 50px;
     @media only screen and (min-width: 768px) {
       padding: 150px 0;
@@ -341,8 +342,8 @@ blockquote {
       }
     }
   }
-  .post-search{
-    background-color: fadeout(#000,40%);
+  .post-search {
+    background-color: fadeout(#000, 40%);
     padding: 20px 50px;
     font-size: .75rem;
     .sans-serif-font;
@@ -350,10 +351,10 @@ blockquote {
     position: absolute;
     width: 100%;
     bottom: 0;
-    @media screen and (max-width: 767px){
+    @media screen and (max-width: 767px) {
       padding: 5px 50px;
     }
-    .btn{
+    .btn {
       border-radius: 0 4px 4px 0;
     }
   }
@@ -393,16 +394,16 @@ blockquote {
         text-decoration: none;
       }
     }
-    >.post-meta-left,.post-meta-right{
-      span{
-        padding:0 5px;
+    > .post-meta-left, .post-meta-right {
+      span {
+        padding: 0 5px;
       }
     }
-    >.post-meta-right{
+    > .post-meta-right {
       float: right;
     }
-    @media only screen and (max-width: 767px){
-      >.post-meta-right{
+    @media only screen and (max-width: 767px) {
+      > .post-meta-right {
         display: none;
       }
     }
@@ -429,39 +430,39 @@ footer {
   }
 }
 
-#postNav{
-  >ul{
-    &.nav-tabs{
+#postNav {
+  > ul {
+    &.nav-tabs {
       width: 200px;
       margin-top: 20px;
       border-radius: 4px;
       border: 1px solid #ddd;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
       font-size: .75rem;
-      &.affix{
-        top: 80px;/* Set the top position of pinned element */
+      &.affix {
+        top: 80px; /* Set the top position of pinned element */
       }
-      li{
+      li {
         margin: 0;
         border-top: 1px solid #ddd;
-        &:first-child{
+        &:first-child {
           border-top: none;
-          a{
+          a {
             border-radius: 4px 4px 0 0;
           }
         }
-        &:last-child{
-          a{
+        &:last-child {
+          a {
             border-radius: 0 0 4px 4px;
           }
         }
-        a{
+        a {
           margin: 0;
           padding: 8px 16px;
           border-radius: 0;
         }
-        &.active{
-          a,a:hover{
+        &.active {
+          a, a:hover {
             color: #fff;
             background: #0088cc;
             border: 1px solid #0088cc;
@@ -473,88 +474,88 @@ footer {
 }
 
 // 文章发表
-#post-form{
-  .post-input-item{
+#post-form {
+  .post-input-item {
     margin-bottom: 10px;
   }
-  .submit-btn{
-    margin:auto;
+  .submit-btn {
+    margin: auto;
   }
-  textarea.dragenter{
-    border:5px dashed #d3d3d3;
+  textarea.dragenter {
+    border: 5px dashed #d3d3d3;
   }
 }
 
 // 登录表单
-#login-form{
-  padding:1rem;
+#login-form {
+  padding: 1rem;
   border-radius: .28571429rem;
-  border: 1px solid rgba(34,36,38,.15);
-  box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
-  label,input[type='text']{
+  border: 1px solid rgba(34, 36, 38, .15);
+  box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
+  label, input[type='text'] {
     color: rgba(0, 0, 0, .87);
     .sans-serif-font;
     font-size: 0.75rem;
   }
-  .post-input-item{
+  .post-input-item {
     margin-bottom: 10px;
   }
-  select{
+  select {
 
-    option{
+    option {
 
     }
   }
 }
 
 // 留言
-#post-comment{
-  padding:1rem;
+#post-comment {
+  padding: 1rem;
   border-radius: .28571429rem;
-  border: 1px solid rgba(34,36,38,.15);
-  box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+  border: 1px solid rgba(34, 36, 38, .15);
+  box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
   .sans-serif-font;
-  h3{
+  h3 {
     font-size: 1rem;
     margin: 0;
     padding-bottom: 5px;
-    border-bottom:1px solid rgba(34,36,38,.15);
+    border-bottom: 1px solid rgba(34, 36, 38, .15);
   }
-  form{
+  form {
     margin-top: 1rem;
-    textarea{
+    textarea {
       margin: 0;
       -webkit-appearance: none;
-      tap-highlight-color: rgba(255,255,255,0);
+      tap-highlight-color: rgba(255, 255, 255, 0);
       padding: .78571429em 1em;
       background: #fff;
-      border: 1px solid rgba(34,36,38,.15);
+      border: 1px solid rgba(34, 36, 38, .15);
       outline: 0;
-      color: rgba(0,0,0,.87);
+      color: rgba(0, 0, 0, .87);
       border-radius: .28571429rem;
       box-shadow: 0 0 0 0 transparent inset;
-      -webkit-transition: color .1s ease,border-color .1s ease;
-      transition: color .1s ease,border-color .1s ease;
+      -webkit-transition: color .1s ease, border-color .1s ease;
+      transition: color .1s ease, border-color .1s ease;
       font-size: 1em;
       line-height: 1.2857;
       resize: vertical;
       margin-bottom: 1rem;
     }
   }
-  .comment{
+  .comment {
     background: 0 0;
     margin: .5em 0 0;
     padding: .5em 0 0;
     border: none;
     border-top: none;
     line-height: 1.2;
-    .avatar{
+    .avatar {
       display: block;
       width: 2.5em;
       height: auto;
       float: left;
       margin: .2em 0 0;
-      img{
+      img {
         display: block;
         margin: 0 auto;
         width: 100%;
@@ -562,44 +563,44 @@ footer {
         border-radius: .25rem;
       }
     }
-    .content{
+    .content {
       margin-left: 3.5em;
       display: block;
       position: relative;
-      &:hover>.actions{
+      &:hover > .actions {
         opacity: 1;
       }
     }
-    .author{
+    .author {
       font-size: 1em;
-      color: rgba(0,0,0,.87);
+      color: rgba(0, 0, 0, .87);
       font-weight: 700;
       cursor: pointer;
     }
-    .matadata{
+    .matadata {
       display: inline-block;
       margin-left: .5em;
-      color: rgba(0,0,0,.4);
+      color: rgba(0, 0, 0, .4);
       font-size: .875em;
-      >*{
+      > * {
         display: inline-block;
         margin: 0 .5em 0 0;
       }
-      &:last-child{
+      &:last-child {
         margin-right: 0;
       }
     }
-    .text{
+    .text {
       margin: .25em 0 .5em;
       font-size: 1em;
       word-wrap: break-word;
-      color: rgba(0,0,0,.87);
+      color: rgba(0, 0, 0, .87);
       line-height: 1.3;
-      >p{
+      > p {
         margin: 0;
       }
     }
-    .actions{
+    .actions {
       opacity: 0;
       position: absolute;
       top: 0;
@@ -610,12 +611,12 @@ footer {
       -webkit-transition-delay: .1s;
       transition-delay: .1s;
       font-size: .875em;
-      a{
+      a {
         cursor: pointer;
         display: inline-block;
         margin: 0 .75em 0 0;
-        color: rgba(0,0,0,.4);
-        &:last-child{
+        color: rgba(0, 0, 0, .4);
+        &:last-child {
           margin-right: 0;
         }
       }
@@ -623,23 +624,23 @@ footer {
   }
 }
 
-#post-content{
+#post-content {
   padding-top: 1rem;
 }
 
-#auto_complete_container{
+#auto_complete_container {
   background: white;
-  >ul{
-    padding:6px 0;
-    margin-bottom:0;
+  > ul {
+    padding: 6px 0;
+    margin-bottom: 0;
     background: #eee;
     border-radius: 5px;
-    >li{
-      padding:5px;
+    > li {
+      padding: 5px;
       height: 30px;
-      >a{
+      > a {
         width: 100%;
-        padding:5px;
+        padding: 5px;
         display: inline-block;
         color: @gray-dark;
         font-size: 0.75rem;
@@ -671,6 +672,48 @@ footer {
   display: block;
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
+}
+
+// 标签
+#tagscloud {
+  width: 250px;
+  height: 260px;
+  position: relative;
+  font-size: 12px;
+  color: #333;
+  margin: 20px auto 0;
+  text-align: center;
+  a{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    color: #333;
+    font-family: Arial;
+    text-decoration: none;
+    margin: 0 10px 15px 0;
+    line-height: 18px;
+    text-align: center;
+    font-size: 12px;
+    padding: 1px 5px;
+    display: inline-block;
+    border-radius: 3px;
+    &.tagc1{
+      background: #666;
+      color: #fff;
+    }
+    &.tagc2{
+      background: #F16E50;
+      color: #fff;
+    }
+    &.tagc3{
+      background: #006633;
+      color: #fff;
+    }
+    &:hover{
+      color: #fff;
+      background: #0099ff;
+    }
+  }
 }
 
 // Contact Form Styles
