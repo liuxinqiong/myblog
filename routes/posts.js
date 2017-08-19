@@ -35,7 +35,7 @@ router.get('/', function (req, res, next) {
             page: page || 1,
             keyword: keyword || "",
             author: author || "",
-            tags: ""
+            tags: tags|| ""
         });
     }).catch(next);
 });
