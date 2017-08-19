@@ -1,0 +1,11 @@
+<div class="post-preview">
+    <a href="/posts/<%= post._id %>">
+        <h2 class="post-title"><%= post.title %></h2>
+    </a>
+    <h3 class="post-subtitle">
+        <!--必须加上markdown-body样式，表示github样式的开始-->
+        <article class="markdown-body"><%- post.content %></article>
+    </h3>
+    <%- include('post-actions') %>
+</div>
+<hr>

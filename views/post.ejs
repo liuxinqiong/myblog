@@ -1,0 +1,57 @@
+<%- include('header') %>
+
+<%- include('components/post-detail') %>
+<%- include('components/comments') %>
+
+<script>
+
+    $(document).ready(function () {
+        function isNumber(ch){
+            return ('0'<=ch && ch<='9') && typeof ch==='string';
+        }
+        // 生成博文内部目录,为避免章节过多，仅允许二级标题(h1 & h2)
+        $("#post-content").children().each(function (index, element) {
+            var tagName = $(this).get(0).tagName;
+            if (tagName.substr(0, 1) == "H" && isNumber(tagName.substr(1, 1)) && parseInt(tagName.substr(1, 1))<3) {
+                var contentH = $(this).html();
+                var level = tagName.substr(1, 1);
+                //缩进的长度
+                //for (var i = 0; i < level; i++) {
+                    //contentH = "-" + contentH;
+                //}
+                // 二级标题
+                if(level==2){
+                    contentH = " ◒ " + contentH;
+                }
+                //添加id
+                var hID = "Title-" + tagName + "-" + index.toString();
+                $(this).attr("id", hID);
+                hID = "#" + hID;
+                //在目标DIV中添加 li
+                $("#postNav>ul").append("<li><a href='" + hID + "'>" + contentH + "</a></li>");
+            }
+        });
+        //在 DOM 中添加或删除元素，调用refresh
+        $('[data-spy="scroll"]').each(function () {
+            $(this).scrollspy('refresh')
+        })
+        //页面内平滑跳转
+        $("#postNav>ul a[href='#']").click(function () {
+            $('html,body').animate({scrollTop: 0}, 1000);
+            return false;
+        });
+        $("#postNav>ul a[href!='#']").click(function () {
+            var var_href = $(this).attr("href");
+            var len_href = var_href.length;
+            var has_mao = var_href.search("#");
+            if (has_mao == -1) return;
+            var index_mao = var_href.lastIndexOf("#");
+            var sub_href = var_href.substr(index_mao, len_href - index_mao);
+            $('html,body').animate({scrollTop: $(sub_href).offset().top}, 1000);
+            return false;
+        });
+    });
+</script>
+
+
+<%- include('footer') %>

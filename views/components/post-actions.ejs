@@ -1,0 +1,22 @@
+<div class="post-meta">
+        <span class="post-meta-left">
+            <span>作者:<a href="/posts?author=<%= post.author._id %>"><%= post.author.name %></a></span>
+            <span> | 日期:<%= post.created_at %></span>
+            <span> | 标签:<%= post.tags %></span>
+        </span>
+    <% if (user && post.author._id && user._id.toString() === post.author._id.toString()) { %>
+    <span class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="/posts/<%= post._id %>/edit">编辑</a></li>
+                <li><a href="javascript:void(0)" data-toggle="modal" data-target="#myModal" data-url="/posts/<%= post._id %>/remove">删除</a></li>
+            </ul>
+        </span>
+    <% } %>
+    <span class="post-meta-right">
+        <span>浏览(<%= post.pv %>)</span>
+        <span>留言(<%= post.commentsCount %>)</span>
+    </span>
+</div>

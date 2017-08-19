@@ -1,0 +1,17 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-preview">
+                <h2 class="post-title"><%= post.title %></h2>
+                <%- include('post-actions') %>
+                <!--必须加上markdown-body样式，表示github样式的开始-->
+                <article id="post-content" class="markdown-body"><%- post.content %></article>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-1" id="postNav">
+            <ul class="nav nav-tabs nav-stacked hidden-print hidden-xs hidden-sm" data-spy="affix"
+                data-offset-top="350"></ul>
+        </div>
+    </div>
+</div>
+<hr>
