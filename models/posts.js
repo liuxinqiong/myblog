@@ -80,18 +80,21 @@ module.exports = {
             .exec();
     },
 
-    getCount:function getCount(author,keyword,isLogin) {
+    getCount: function getCount(author, keyword, tags, isLogin) {
         var query = {};
         if (author) {
             query.author = author;
         }
-        if(keyword){
+        if (keyword) {
             var pattern = new RegExp(keyword, "i");
-            query.title=pattern;
+            query.title = pattern;
         }
-        if(!isLogin){
+        if (tags) {
+            query.tags = tags;
+        }
+        if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate=false||undefined;
+            query.isPrivate = false || undefined;
         }
         return Post
             .count(query)
@@ -99,7 +102,7 @@ module.exports = {
     },
 
     // 按创建时间降序获取所有用户文章或者某个特定用户的所有文章
-    getPosts: function getPosts(author, keyword, page,isLogin) {
+    getPosts: function getPosts(author, keyword, tags, page, isLogin) {
         var query = {};
         if (author) {
             query.author = author;
@@ -107,13 +110,16 @@ module.exports = {
         if (!page) {
             page = 1;
         }
-        if(keyword){
+        if (keyword) {
             var pattern = new RegExp(keyword, "i");
-            query.title=pattern;
+            query.title = pattern;
         }
-        if(!isLogin){
+        if (tags) {
+            query.tags = tags;
+        }
+        if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate=false||undefined;
+            query.isPrivate = false || undefined;
         }
         return Post
             .find(query, {
@@ -128,65 +134,29 @@ module.exports = {
             .contentToMark()
             .exec();
     },
-    getPostBySearch:function (keyword,isLogin) {
-        var query={};
-        if(keyword){
+    getPostBySearch: function (keyword, isLogin) {
+        var query = {};
+        if (keyword) {
             var pattern = new RegExp(keyword, "i");
-            query.title=pattern;
+            query.title = pattern;
         }
-        if(!isLogin){
+        if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate=false||undefined;
+            query.isPrivate = false || undefined;
         }
         return Post
             .find(query)
             .sort({_id: -1})
             .exec();
     },
-    getTags:function(isLogin){
-        var query={tags:{"$ne":""}};
-        if(!isLogin){
+    getTags: function (isLogin) {
+        var query = {tags: {"$ne": ""}};
+        if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate=false||undefined;
+            query.isPrivate = false || undefined;
         }
         return Post
-            .distinct('tags',query)
-            .exec();
-    },
-    getPostByTags:function (tags,page,isLogin) {
-        var query={tags:tags};
-        if(!isLogin){
-            // 非登录只能看非私有
-            query.isPrivate=false||undefined;
-        }
-        if (!page) {
-            page = 1;
-        }
-        return Post
-            .find(query,{
-                skip: (page - 1) * 5,
-                limit: 5
-            })
-            .populate({path: 'author', model: 'User'})
-            .sort({_id: -1})
-            .addCreatedAt()
-            .addCommentsCount()
-            .contentToHtml()
-            .contentToMark()
-            .exec();
-
-    },
-    getCountByTags:function getCount(tags,isLogin) {
-        var query = {};
-        if (tags) {
-            query.tags = tags;
-        }
-        if(!isLogin){
-            // 非登录只能看非私有
-            query.isPrivate=false||undefined;
-        }
-        return Post
-            .count(query)
+            .distinct('tags', query)
             .exec();
     },
     // 通过文章 id 给 pv 加 1

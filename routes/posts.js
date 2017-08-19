@@ -13,13 +13,14 @@ router.get('/', function (req, res, next) {
     var author = req.query.author;
     var page = req.query.page;
     var keyword = req.query.keyword;
+    var tags = req.query.tags;
     var isLogin = false;
     // 未登录不能看私有文章
     if (req.session.user)
         isLogin = true;
     Promise.all([
-        PostModel.getPosts(author, keyword, page,isLogin),
-        PostModel.getCount(author, keyword,isLogin)
+        PostModel.getPosts(author, keyword, tags, page, isLogin),
+        PostModel.getCount(author, keyword, tags, isLogin)
     ]).then(function (result) {
         var posts = result[0];
         var total = result[1];
@@ -34,7 +35,7 @@ router.get('/', function (req, res, next) {
             page: page || 1,
             keyword: keyword || "",
             author: author || "",
-            tags:""
+            tags: ""
         });
     }).catch(next);
 });
@@ -46,13 +47,13 @@ router.post('/search', function (req, res, next) {
     // 未登录不能看私有文章
     if (req.session.user)
         isLogin = true;
-    PostModel.getPostBySearch(keyword,isLogin).then(function (data) {
+    PostModel.getPostBySearch(keyword, isLogin).then(function (data) {
         res.json(data);
     }).catch(next);
 });
 
 // 文章所有标签
-router.get('/tags',function(req,res,next){
+router.get('/tags', function (req, res, next) {
     var isLogin = false;
     // 未登录不能看私有文章
     if (req.session.user)
@@ -62,37 +63,6 @@ router.get('/tags',function(req,res,next){
         res.render('tags', {
             tags: data
         })
-    }).catch(next);
-});
-
-router.get('/tags/:tags',function(req,res,next){
-    var tags = req.params.tags;
-    var page = req.query.page;
-    var isLogin = false;
-    // 未登录不能看私有文章
-    if (req.session.user)
-        isLogin = true;
-    console.log(tags,page,isLogin);
-    Promise.all([
-        PostModel.getPostByTags(tags,page,isLogin),
-        PostModel.getCountByTags(tags,isLogin)
-    ]).then(function (result) {
-        console.log(result);
-        var posts = result[0];
-        var total = result[1];
-        var totalpage = parseInt(total / 5);
-        if (total % 5 !== 0) {
-            totalpage = totalpage + 1;
-        }
-        res.render('posts', {
-            posts: posts,
-            total: total,
-            totalpage: totalpage,
-            page: page || 1,
-            keyword: "",
-            author: "",
-            tags: tags || ""
-        });
     }).catch(next);
 });
 

@@ -2,7 +2,7 @@
 
 <div id="tagscloud">
     <% tags.forEach(function (tag) { %>
-        <a href="/posts/tags/<%=tag%>" class="tagc1"><%=tag%></a>
+        <a href="/posts?tags=<%=tag%>" class="tagc<%=Math.ceil(Math.random()*3)%>"><%=tag%></a>
     <% }) %>
 </div>
 
