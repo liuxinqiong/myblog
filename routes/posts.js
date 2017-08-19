@@ -13,9 +13,13 @@ router.get('/', function (req, res, next) {
     var author = req.query.author;
     var page = req.query.page;
     var keyword = req.query.keyword;
+    var isLogin = false;
+    // 未登录不能看私有文章
+    if (req.session.user)
+        isLogin = true;
     Promise.all([
-        PostModel.getPosts(author, keyword, page),
-        PostModel.getCount(author, keyword)
+        PostModel.getPosts(author, keyword, page,isLogin),
+        PostModel.getCount(author, keyword,isLogin)
     ]).then(function (result) {
         var posts = result[0];
         var total = result[1];
@@ -35,9 +39,13 @@ router.get('/', function (req, res, next) {
 });
 
 // ajax自动提示
-router.post('/search',function(req, res, next){
+router.post('/search', function (req, res, next) {
     var keyword = req.fields.title;
-    PostModel.getPostBySearch(keyword).then(function(data){
+    var isLogin = false;
+    // 未登录不能看私有文章
+    if (req.session.user)
+        isLogin = true;
+    PostModel.getPostBySearch(keyword,isLogin).then(function (data) {
         res.json(data);
     }).catch(next);
 });
@@ -53,6 +61,8 @@ router.post('/', checkLogin, function (req, res, next) {
     var title = req.fields.title;
     var content = req.fields.content;
     var tags = req.fields.tags;
+    var isPrivate = req.fields.isPrivate;
+    console.log(isPrivate);
     // 校验参数
     try {
         if (!title.length) {
@@ -136,7 +146,8 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
     var title = req.fields.title;
     var content = req.fields.content;
     var tags = req.fields.tags;
-    PostModel.updatePostById(postId, author, {title: title, content: content, tags: tags})
+    var isPrivate = req.fields.isPrivate ? true : false;
+    PostModel.updatePostById(postId, author, {title: title, content: content, tags: tags, isPrivate: isPrivate})
         .then(function () {
             req.flash('success', '编辑文章成功');
             // 编辑成功后跳转到上一页

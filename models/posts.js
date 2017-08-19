@@ -80,7 +80,7 @@ module.exports = {
             .exec();
     },
 
-    getCount:function getCount(author,keyword) {
+    getCount:function getCount(author,keyword,isLogin) {
         var query = {};
         if (author) {
             query.author = author;
@@ -89,13 +89,17 @@ module.exports = {
             var pattern = new RegExp(keyword, "i");
             query.title=pattern;
         }
+        if(!isLogin){
+            // 非登录只能看非私有
+            query.isPrivate=false||undefined;
+        }
         return Post
             .count(query)
             .exec();
     },
 
     // 按创建时间降序获取所有用户文章或者某个特定用户的所有文章
-    getPosts: function getPosts(author, keyword, page) {
+    getPosts: function getPosts(author, keyword, page,isLogin) {
         var query = {};
         if (author) {
             query.author = author;
@@ -106,6 +110,10 @@ module.exports = {
         if(keyword){
             var pattern = new RegExp(keyword, "i");
             query.title=pattern;
+        }
+        if(!isLogin){
+            // 非登录只能看非私有
+            query.isPrivate=false||undefined;
         }
         return Post
             .find(query, {
@@ -120,11 +128,15 @@ module.exports = {
             .contentToMark()
             .exec();
     },
-    getPostBySearch:function (keyword) {
+    getPostBySearch:function (keyword,isLogin) {
         var query={};
         if(keyword){
             var pattern = new RegExp(keyword, "i");
             query.title=pattern;
+        }
+        if(!isLogin){
+            // 非登录只能看非私有
+            query.isPrivate=false||undefined;
         }
         return Post
             .find(query)
