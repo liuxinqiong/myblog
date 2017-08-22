@@ -94,7 +94,7 @@ module.exports = {
         }
         if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate = false || undefined;
+            query.isPrivate = {"$ne":true};
         }
         return Post
             .count(query)
@@ -119,7 +119,7 @@ module.exports = {
         }
         if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate = false || undefined;
+            query.isPrivate = {"$ne":true};
         }
         return Post
             .find(query, {
@@ -142,7 +142,7 @@ module.exports = {
         }
         if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate = false || undefined;
+            query.isPrivate = {"$ne":true};
         }
         return Post
             .find(query)
@@ -153,7 +153,7 @@ module.exports = {
         var query = {tags: {"$ne": ""}};
         if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate = false || undefined;
+            query.isPrivate = {"$ne":true};
         }
         return Post
             .distinct('tags', query)
