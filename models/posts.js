@@ -84,8 +84,8 @@ module.exports = {
     // 得到上一篇文章
     getPrePostByCurId:function getPrePostByCurId(curId) {
         return Post
-            .find({'_id':{'$lt':curId}},{'_id':1,'title':1,'tags':1})
-            .sort({_id: -1})
+            .find({'_id':{'$gt':curId}},{'_id':1,'title':1,'tags':1})
+            .sort({_id: 1})// 升序
             .limit(1)
             .exec();
     },
@@ -93,8 +93,8 @@ module.exports = {
     // 得到下一篇文章
     getNextPostByCurId:function getNextPostByCurId(curId) {
         return Post
-            .find({'_id':{'$gt':curId}},{'_id':1,'title':1,'tags':1})
-            .sort({_id: 1})
+            .find({'_id':{'$lt':curId}},{'_id':1,'title':1,'tags':1})
+            .sort({_id: -1})// 降序
             .limit(1)
             .exec();
     },

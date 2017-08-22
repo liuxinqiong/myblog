@@ -120,6 +120,7 @@ router.get('/:postId', function (req, res, next) {
         PostModel.getNextPostByCurId(postId),// 获取下一篇
         PostModel.incPv(postId)// pv 加 1
     ]).then(function (result) {
+        console.log(result);
         var post = result[0];
         var comments = result[1];
         var prePost=result[2];
@@ -129,8 +130,8 @@ router.get('/:postId', function (req, res, next) {
         }
         res.render('post', {
             post: post,
-            prePost:prePost,
-            nextPost:nextPost,
+            prePost:prePost[0]||{},// 返回为数组，默认去第一条，不存在返回空
+            nextPost:nextPost[0]||{},
             comments: comments
         });
     }).catch(next);

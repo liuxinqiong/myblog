@@ -716,6 +716,35 @@ footer {
   }
 }
 
+.preAndNext{
+  margin-top:20px;
+  background: #eee;
+  padding:10px;
+  border-radius: 5px;
+  font-size: .75rem;
+  display: flex;
+  flex-direction: row;
+  & a{
+    text-decoration: none;
+    color: @gray-dark;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      color: @theme-primary;
+      .transition-all;
+    }
+  }
+  &>div{
+    flex: 1;
+  }
+  &>div:first-child{
+    text-align: left;
+  }
+  &>div:last-child{
+    text-align: right;
+  }
+}
+
 // Contact Form Styles
 .floating-label-form-group {
   font-size: 14px;
