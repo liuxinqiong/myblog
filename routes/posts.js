@@ -35,7 +35,7 @@ router.get('/', function (req, res, next) {
             page: page || 1,
             keyword: keyword || "",
             author: author || "",
-            tags: tags|| ""
+            tags: tags || ""
         });
     }).catch(next);
 });
@@ -116,21 +116,24 @@ router.get('/:postId', function (req, res, next) {
     Promise.all([
         PostModel.getPostById(postId),// 获取文章信息
         CommentModel.getComments(postId),// 获取该文章所有留言
+        PostModel.getPrePostByCurId(postId),// 获取上一篇
+        PostModel.getNextPostByCurId(postId),// 获取下一篇
         PostModel.incPv(postId)// pv 加 1
-    ])
-        .then(function (result) {
-            var post = result[0];
-            var comments = result[1];
-            if (!post) {
-                throw new Error('该文章不存在');
-            }
-
-            res.render('post', {
-                post: post,
-                comments: comments
-            });
-        })
-        .catch(next);
+    ]).then(function (result) {
+        var post = result[0];
+        var comments = result[1];
+        var prePost=result[2];
+        var nextPost=result[3];
+        if (!post) {
+            throw new Error('该文章不存在');
+        }
+        res.render('post', {
+            post: post,
+            prePost:prePost,
+            nextPost:nextPost,
+            comments: comments
+        });
+    }).catch(next);
 });
 
 // GET /posts/:postId/edit 更新文章页

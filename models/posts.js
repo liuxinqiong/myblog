@@ -42,6 +42,7 @@ Post.plugin('contentToHtml', {
     }
 });
 
+// 按标记截取
 Post.plugin('contentToMark', {
     afterFind: function (posts) {
         return posts.map(function (post) {
@@ -80,6 +81,25 @@ module.exports = {
             .exec();
     },
 
+    // 得到上一篇文章
+    getPrePostByCurId:function getPrePostByCurId(curId) {
+        return Post
+            .find({'_id':{'$lt':curId}},{'_id':1,'title':1,'tags':1})
+            .sort({_id: -1})
+            .limit(1)
+            .exec();
+    },
+
+    // 得到下一篇文章
+    getNextPostByCurId:function getNextPostByCurId(curId) {
+        return Post
+            .find({'_id':{'$gt':curId}},{'_id':1,'title':1,'tags':1})
+            .sort({_id: 1})
+            .limit(1)
+            .exec();
+    },
+
+    // 得到数据总条数，用于分页
     getCount: function getCount(author, keyword, tags, isLogin) {
         var query = {};
         if (author) {
@@ -134,6 +154,8 @@ module.exports = {
             .contentToMark()
             .exec();
     },
+
+    // ajax查询提示
     getPostBySearch: function (keyword, isLogin) {
         var query = {};
         if (keyword) {
@@ -145,10 +167,12 @@ module.exports = {
             query.isPrivate = {"$ne":true};
         }
         return Post
-            .find(query)
+            .find(query,{'_id':1,'title':1,'tags':1})
             .sort({_id: -1})
             .exec();
     },
+
+    // 得到所有标签
     getTags: function (isLogin) {
         var query = {tags: {"$ne": ""}};
         if (!isLogin) {
@@ -159,6 +183,7 @@ module.exports = {
             .distinct('tags', query)
             .exec();
     },
+
     // 通过文章 id 给 pv 加 1
     incPv: function incPv(postId) {
         return Post
