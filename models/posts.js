@@ -82,18 +82,28 @@ module.exports = {
     },
 
     // 得到上一篇文章
-    getPrePostByCurId:function getPrePostByCurId(curId) {
+    getPrePostByCurId:function getPrePostByCurId(curId,isLogin) {
+        var query={'_id':{'$gt':curId}};
+        if (!isLogin) {
+            // 非登录只能看非私有
+            query.isPrivate = {"$ne":true};
+        }
         return Post
-            .find({'_id':{'$gt':curId}},{'_id':1,'title':1,'tags':1})
+            .find(query,{'_id':1,'title':1,'tags':1})
             .sort({_id: 1})// 升序
             .limit(1)
             .exec();
     },
 
     // 得到下一篇文章
-    getNextPostByCurId:function getNextPostByCurId(curId) {
+    getNextPostByCurId:function getNextPostByCurId(curId,isLogin) {
+        var query={'_id':{'$lt':curId}};
+        if (!isLogin) {
+            // 非登录只能看非私有
+            query.isPrivate = {"$ne":true};
+        }
         return Post
-            .find({'_id':{'$lt':curId}},{'_id':1,'title':1,'tags':1})
+            .find(query,{'_id':1,'title':1,'tags':1})
             .sort({_id: -1})// 降序
             .limit(1)
             .exec();
