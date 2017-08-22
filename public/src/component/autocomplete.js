@@ -48,7 +48,6 @@ $(document).ready(function () {
         request&&request.abort();
         var data=JSON.stringify({title:value});
         var ajaxUtil=new AjaxUtil('POST','/posts/search',data,function(data){
-            console.log(data);
             var html='<ul>';
             for(var i=0;i<data.length;i++){
                 var target=data[i];

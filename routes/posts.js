@@ -59,7 +59,6 @@ router.get('/tags', function (req, res, next) {
     if (req.session.user)
         isLogin = true;
     PostModel.getTags(isLogin).then(function (data) {
-        console.log(data);
         res.render('tags', {
             tags: data
         })
@@ -78,7 +77,6 @@ router.post('/', checkLogin, function (req, res, next) {
     var content = req.fields.content;
     var tags = req.fields.tags;
     var isPrivate = req.fields.isPrivate;
-    console.log(isPrivate);
     // 校验参数
     try {
         if (!title.length) {

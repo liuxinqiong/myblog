@@ -1,9 +1,14 @@
 <%- include('header') %>
-
-<div id="tagscloud">
-    <% tags.forEach(function (tag) { %>
-        <a href="/posts?tags=<%=tag%>" class="tagc<%=Math.ceil(Math.random()*3)%>"><%=tag%></a>
-    <% }) %>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div id="tagscloud">
+                <% tags.forEach(function (tag) { %>
+                <a href="/posts?tags=<%=tag%>" class="tagc<%=Math.ceil(Math.random()*3)%>"><%=tag%></a>
+                <% }) %>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="/lib/tagscloud.js"></script>
