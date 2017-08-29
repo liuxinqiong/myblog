@@ -128,14 +128,18 @@ router.post('/', checkLogin, function (req, res, next) {
 // GET /posts/:postId 单独一篇的文章页
 router.get('/:postId', function (req, res, next) {
     var postId = req.params.postId;
-
+    var isLogin = false;
+    // 未登录不能看私有文章
+    if (req.session.user)
+        isLogin = true;
     Promise.all([
         PostModel.getPostById(postId),// 获取文章信息
         CommentModel.getComments(postId),// 获取该文章所有留言
-        PostModel.getPrePostByCurId(postId),// 获取上一篇
-        PostModel.getNextPostByCurId(postId),// 获取下一篇
+        PostModel.getPrePostByCurId(postId,isLogin),// 获取上一篇
+        PostModel.getNextPostByCurId(postId,isLogin),// 获取下一篇
         PostModel.incPv(postId)// pv 加 1
     ]).then(function (result) {
+        console.log(result);
         var post = result[0];
         var comments = result[1];
         var prePost=result[2];
@@ -145,8 +149,8 @@ router.get('/:postId', function (req, res, next) {
         }
         res.render('post', {
             post: post,
-            prePost:prePost,
-            nextPost:nextPost,
+            prePost:prePost[0]||{},// 返回为数组，默认去第一条，不存在返回空
+            nextPost:nextPost[0]||{},
             comments: comments
         });
     }).catch(next);

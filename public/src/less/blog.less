@@ -717,11 +717,11 @@ footer {
 }
 
 // 文章归档
-.posts-collapse{
+.posts-collapse {
   position: relative;
   z-index: 1010;
   margin-left: 55px;
-  &::after{
+  &::after {
     content: " ";
     position: absolute;
     top: 20px;
@@ -732,7 +732,7 @@ footer {
     background: #f5f5f5;
     z-index: -1;
   }
-  .archive-move-on{
+  .archive-move-on {
     position: absolute;
     top: 11px;
     left: 0;
@@ -744,15 +744,15 @@ footer {
     border: 1px solid #fff;
     border-radius: 50%;
   }
-  .archive-page-counter{
+  .archive-page-counter {
     position: relative;
     top: 3px;
     left: 20px;
   }
-  .collection-title{
+  .collection-title {
     position: relative;
     margin: 60px 0;
-    &::after{
+    &::after {
       content: " ";
       position: absolute;
       left: 0;
@@ -764,21 +764,21 @@ footer {
       background: #bbb;
       border-radius: 50%;
     }
-    h2{
+    h2 {
       margin-left: 20px;
     }
   }
-  .post{
+  .post {
     margin: 30px 0;
   }
-  .post-header{
+  .post-header {
     position: relative;
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
     transition-delay: 0s;
     transition-property: border;
     border-bottom: 1px dashed #ccc;
-    &::before{
+    &::before {
       content: " ";
       position: absolute;
       left: 0;
@@ -795,22 +795,51 @@ footer {
       transition-property: background;
     }
   }
-  .post-title{
+  .post-title {
     margin-left: 60px;
     font-size: 16px;
     font-weight: normal;
     line-height: inherit;
-    a{
+    a {
       color: #666;
       border-bottom: none;
       text-decoration: none;
     }
   }
-  .post-meta{
+  .post-meta {
     position: absolute;
     font-size: 12px;
     left: 20px;
     top: 5px;
+  }
+}
+
+// 上一篇下一篇
+.preAndNext{
+  background: #eee;
+  padding:10px;
+  border-radius: 5px;
+  font-size: .75rem;
+  display: flex;
+  flex-direction: row;
+  & a{
+    text-decoration: none;
+    color: @gray-dark;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      color: @theme-primary;
+      .transition-all;
+    }
+  }
+  &>div{
+    flex: 1;
+  }
+  &>div:first-child{
+    text-align: left;
+  }
+  &>div:last-child{
+    text-align: right;
   }
 }
 

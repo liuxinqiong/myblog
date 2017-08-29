@@ -689,6 +689,35 @@ footer .copyright {
   color: #fff;
   background: #0099ff;
 }
+.preAndNext {
+  background: #eee;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: .75rem;
+  display: flex;
+  flex-direction: row;
+}
+.preAndNext a {
+  text-decoration: none;
+  color: #333333;
+}
+.preAndNext a:hover,
+.preAndNext a:focus {
+  text-decoration: none;
+  color: #0085A1;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
+}
+.preAndNext > div {
+  flex: 1;
+}
+.preAndNext > div:first-child {
+  text-align: left;
+}
+.preAndNext > div:last-child {
+  text-align: right;
+}
 .floating-label-form-group {
   font-size: 14px;
   position: relative;
