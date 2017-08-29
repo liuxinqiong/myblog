@@ -89,7 +89,8 @@ module.exports = {
             query.isPrivate = {"$ne":true};
         }
         return Post
-            .find(query,{'_id':1,'title':1,'tags':1})
+            .find(query)
+            .select({'_id':1,'title':1,'tags':1})
             .sort({_id: 1})// 升序
             .limit(1)
             .exec();
@@ -103,7 +104,8 @@ module.exports = {
             query.isPrivate = {"$ne":true};
         }
         return Post
-            .find(query,{'_id':1,'title':1,'tags':1})
+            .find(query)
+            .select({'_id':1,'title':1,'tags':1})
             .sort({_id: -1})// 降序
             .limit(1)
             .exec();
@@ -174,6 +176,7 @@ module.exports = {
         }
         return Post
             .find(query)
+            .select({'_id':1,'title':1,'tags':1})
             .sort({_id: -1})
             .addCreatedAt()
             .exec();
@@ -191,7 +194,8 @@ module.exports = {
             query.isPrivate = {"$ne":true};
         }
         return Post
-            .find(query,{'_id':1,'title':1,'tags':1})
+            .find(query)
+            .select({'_id':1,'title':1,'tags':1})
             .sort({_id: -1})
             .exec();
     },
