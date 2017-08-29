@@ -155,6 +155,20 @@ module.exports = {
             .exec();
     },
 
+    // 文章归档
+    getArchivePosts: function (isLogin) {
+        var query = {};
+        if (!isLogin) {
+            // 非登录只能看非私有
+            query.isPrivate = {"$ne":true};
+        }
+        return Post
+            .find(query)
+            .sort({_id: -1})
+            .addCreatedAt()
+            .exec();
+    },
+
     // ajax查询提示
     getPostBySearch: function (keyword, isLogin) {
         var query = {};
