@@ -11,6 +11,12 @@
 </div>
 <hr>
 <script>
+    function collapseToggle(obj) {
+        var $obj=$(obj);
+        $obj.prev().toggleClass('fa-minus-circle fa-plus-circle');
+        $('#archives-year-'+$obj.text()).fadeToggle();
+    }
+
     $(document).ready(function () {
         $.ajax({
             type: 'post',
@@ -30,7 +36,8 @@
                     }
                 }
                 for (var attr in archives) {
-                    html += '<div class="collection-title"> <h2 class="archive-year motion-element">' + attr + '</h2> </div>';
+                    // fa-minus-circle fa-plus-circle
+                    html += '<div class="collection-title"><h2 class="archive-year motion-element"><i class="fa fa-minus-circle"></i><a href="javascript:void(0)" onclick="collapseToggle(this)">' + attr + '</a></h2></div><div id="archives-year-'+attr+'">';
                     for (var j = 0; j < archives[attr].length; j++) {
                         var post = archives[attr][j];
                         html += '<article class="post post-type-normal"> ' +
@@ -45,6 +52,7 @@
                                 '</header> ' +
                                 '</article>';
                     }
+                    html+='</div>';
                 }
                 $('#posts-archives').html(html);
             },
