@@ -676,6 +676,10 @@ footer {
   color: #333;
   margin: 20px auto 0;
   text-align: center;
+  @media only screen and (max-width: 576px){
+    width: 250px;
+    height: 200px;
+  }
   a{
     position: absolute;
     top: 0px;
@@ -712,7 +716,6 @@ footer {
 .posts-collapse {
   position: relative;
   z-index: 1010;
-  margin-left: 55px;
   &::after {
     content: " ";
     position: absolute;

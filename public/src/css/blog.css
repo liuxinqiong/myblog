@@ -651,6 +651,12 @@ footer .copyright {
   margin: 20px auto 0;
   text-align: center;
 }
+@media only screen and (max-width: 576px) {
+  #tagscloud {
+    width: 250px;
+    height: 200px;
+  }
+}
 #tagscloud a {
   position: absolute;
   top: 0px;
@@ -684,7 +690,6 @@ footer .copyright {
 .posts-collapse {
   position: relative;
   z-index: 1010;
-  margin-left: 55px;
 }
 .posts-collapse::after {
   content: " ";
