@@ -396,7 +396,7 @@ blockquote {
 }
 .post-preview > .post-meta > .post-meta-left span,
 .post-preview > .post-meta .post-meta-right span {
-  padding: 0 5px;
+  padding: 0;
 }
 .post-preview > .post-meta > .post-meta-right {
   float: right;
