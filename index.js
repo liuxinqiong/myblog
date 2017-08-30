@@ -36,6 +36,7 @@ app.use(session({
         url: config.mongodb// mongodb 地址
     })
 }));
+
 // flash 中间件，用来显示通知
 app.use(flash());
 
@@ -52,7 +53,6 @@ app.locals.blog = {
     website:pkg.website,
     author:pkg.author,
     keywords:pkg.keywords
-
 };
 
 // 添加模板必需的三个变量
@@ -76,17 +76,22 @@ app.use(expressWinston.logger({
     ]
 }));
 
-app.all('*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
-    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-    if(req.method=="OPTIONS") res.send(200);/*让options请求快速返回*/
-    else  next();
-});
+// 线上环境是Nginx代理，为避免重复请求头问题，因此限定开发环境才设置允许跨域
+if(process.env.BLOG_ENV==='DEV'){
+    app.all('*', function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
+        res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+        if(req.method=="OPTIONS") res.send(200);/*让options预检请求快速返回*/
+        else  next();
+    });
+}
 
+app.disable('x-powered-by');
 
 // 路由
 routes(app);
+
 // 错误请求的日志
 app.use(expressWinston.errorLogger({
     transports: [
@@ -102,12 +107,13 @@ app.use(expressWinston.errorLogger({
 
 // error page
 app.use(function (err, req, res, next) {
+    console.log('**************883***********');
     res.render('error', {
         error: err
     });
 });
 
-//直接启动 index.js 则会监听端口启动程序，如果 index.js 被 require 了，则导出 app，通常用于测试。
+// 直接启动 index.js 则会监听端口启动程序，如果 index.js 被 require 了，则导出 app，通常用于测试。
 // 监听端口，启动程序
 if (module.parent) {
     module.exports = app;

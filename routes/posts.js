@@ -10,6 +10,7 @@ var checkLogin = require('../middlewares/check').checkLogin;
 // GET /posts 所有用户或者特定用户的文章页
 // eg: GET /posts?author=xxx
 router.get('/', function (req, res, next) {
+    console.log('**************882***********');
     var author = req.query.author;
     var page = req.query.page;
     var keyword = req.query.keyword;
@@ -92,7 +93,7 @@ router.post('/', checkLogin, function (req, res, next) {
     var title = req.fields.title;
     var content = req.fields.content;
     var tags = req.fields.tags;
-    var isPrivate = req.fields.isPrivate;
+    var isPrivate = req.fields.isPrivate ? true : false;
     // 校验参数
     try {
         if (!title.length) {
@@ -111,7 +112,8 @@ router.post('/', checkLogin, function (req, res, next) {
         title: title,
         content: content,
         pv: 0,
-        tags: tags
+        tags: tags,
+        isPrivate:isPrivate
     };
 
     PostModel.create(post)
@@ -139,7 +141,6 @@ router.get('/:postId', function (req, res, next) {
         PostModel.getNextPostByCurId(postId,isLogin),// 获取下一篇
         PostModel.incPv(postId)// pv 加 1
     ]).then(function (result) {
-        console.log(result);
         var post = result[0];
         var comments = result[1];
         var prePost=result[2];

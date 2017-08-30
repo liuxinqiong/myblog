@@ -10,6 +10,7 @@ module.exports = function (app) {
     app.use('/file',require('./file'))
     // 404 page
     app.use(function (req, res) {
+        console.log('**************881***********');
         if (!res.headersSent) {
             res.status(404).render('404');
         }
