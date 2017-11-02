@@ -10,7 +10,7 @@ module.exports = function (app) {
     app.use('/file',require('./file'))
     // 404 page
     app.use(function (req, res) {
-        console.log('**************881***********');
+        console.log('我是404处理器:' + req.path);
         if (!res.headersSent) {
             res.status(404).render('404');
         }

@@ -6,11 +6,13 @@ var router = express.Router();
 var PostModel = require('../models/posts');
 var CommentModel = require('../models/comments');
 var checkLogin = require('../middlewares/check').checkLogin;
+var credentials = require('../config/credentials');
+var mailer = require('../lib/email')(credentials);
 
 // GET /posts 所有用户或者特定用户的文章页
 // eg: GET /posts?author=xxx
 router.get('/', function (req, res, next) {
-    console.log('**************882***********');
+    console.log('我是/posts GET请求');
     var author = req.query.author;
     var page = req.query.page;
     var keyword = req.query.keyword;
@@ -54,12 +56,12 @@ router.post('/search', function (req, res, next) {
 });
 
 // 文章归档页
-router.get('/archives',function (req,res,next) {
+router.get('/archives', function (req, res, next) {
     res.render('archives');
 });
 
 // 文章归档
-router.post('/archives',function (req,res,next) {
+router.post('/archives', function (req, res, next) {
     var isLogin = false;
     // 未登录不能看私有文章
     if (req.session.user)
@@ -113,7 +115,7 @@ router.post('/', checkLogin, function (req, res, next) {
         content: content,
         pv: 0,
         tags: tags,
-        isPrivate:isPrivate
+        isPrivate: isPrivate
     };
 
     PostModel.create(post)
@@ -137,21 +139,21 @@ router.get('/:postId', function (req, res, next) {
     Promise.all([
         PostModel.getPostById(postId),// 获取文章信息
         CommentModel.getComments(postId),// 获取该文章所有留言
-        PostModel.getPrePostByCurId(postId,isLogin),// 获取上一篇
-        PostModel.getNextPostByCurId(postId,isLogin),// 获取下一篇
+        PostModel.getPrePostByCurId(postId, isLogin),// 获取上一篇
+        PostModel.getNextPostByCurId(postId, isLogin),// 获取下一篇
         PostModel.incPv(postId)// pv 加 1
     ]).then(function (result) {
         var post = result[0];
         var comments = result[1];
-        var prePost=result[2];
-        var nextPost=result[3];
+        var prePost = result[2];
+        var nextPost = result[3];
         if (!post) {
             throw new Error('该文章不存在');
         }
         res.render('post', {
             post: post,
-            prePost:prePost[0]||{},// 返回为数组，默认去第一条，不存在返回空
-            nextPost:nextPost[0]||{},
+            prePost: prePost[0] || {},// 返回为数组，默认去第一条，不存在返回空
+            nextPost: nextPost[0] || {},
             comments: comments
         });
     }).catch(next);
@@ -218,14 +220,20 @@ router.post('/:postId/comment', checkLogin, function (req, res, next) {
         postId: postId,
         content: content
     };
-
-    CommentModel.create(comment)
-        .then(function () {
-            req.flash('success', '留言成功');
-            // 留言成功后跳转到上一页
-            res.redirect('back');
-        })
-        .catch(next);
+    Promise.all([
+        PostModel.getPostById(postId),
+        CommentModel.create(comment)
+    ]).then(function (result) {
+        // 给文章作者发送邮件
+        var email = result[0].author.email;
+        var title = result[0].title;
+        if (email) {
+            mailer.send(email, title, content);
+        }
+        req.flash('success', '留言成功');
+        // 留言成功后跳转到上一页
+        res.redirect('back');
+    }).catch(next);
 });
 
 // GET /posts/:postId/comment/:commentId/remove 删除一条留言
