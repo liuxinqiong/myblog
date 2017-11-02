@@ -11,8 +11,8 @@ var winston = require('winston');
 var expressWinston = require('express-winston');
 // var bodyParser = require("body-parser");
 var errorDomain = require('./middlewares/error-domain')
-var credentials = require('../config/credentials');
-var emailService = require('../lib/email.js')(credentials);
+var credentials = require('./config/credentials');
+var emailService = require('./lib/email.js')(credentials);
 
 var app = express();
 
