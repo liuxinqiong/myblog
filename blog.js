@@ -13,6 +13,7 @@ var expressWinston = require('express-winston');
 var errorDomain = require('./middlewares/error-domain')
 var credentials = require('./config/credentials');
 var emailService = require('./lib/email.js')(credentials);
+var vhost = require('vhost');
 
 var app = express();
 
@@ -116,7 +117,7 @@ if (app.get('env') === 'development') {
 app.disable('x-powered-by');
 
 // 路由
-routes(app);
+routes(app,vhost);
 
 // 错误请求的日志
 app.use(expressWinston.errorLogger({
