@@ -9,6 +9,7 @@ module.exports = function (app) {
     app.use('/signout', require('./signout'));
     app.use('/posts', require('./posts'));
     app.use('/file', require('./file'));
+    app.use('/contact',require('./contact'));
     // 404 page
     app.use(function (req, res) {
         console.log('我是404处理器:' + req.path);
