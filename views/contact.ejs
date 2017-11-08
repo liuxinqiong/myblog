@@ -1,31 +1,31 @@
 <%- include('header') %>
 
-<div class="container">
+<div class="container contact-container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             <p>
-                简单介绍一下自己啦
+                开放式的心态去拥抱技术，热爱技术与生活
+                <br/>
+                喜欢打球，各种小球，like pingpong & badminton；大球搞不定，总觉得自己手小！
+                <br/>
+                <a href="#" class="more">more…</a>
             </p>
-            <form action="" name="sentMessage" id="contactForm" novalidate>
-                <div class="form-group has-success">
+            <form method="post" id="contactForm">
+                <div class="form-group">
                     <label class="control-label" for="name">姓名</label>
-                    <input type="text" class="form-control" id="name" aria-describedby="helpBlockName" required data-validation-required-message="请输入名字">
-                    <span id="helpBlockName" class="help-block">block</span>
+                    <input type="text" class="form-control" id="name" name="name">
                 </div>
-                <div class="form-group has-warning">
+                <div class="form-group">
                     <label class="control-label" for="email">邮箱</label>
-                    <input type="email" class="form-control" id="email" aria-describedby="helpBlockEmail" required data-validation-required-message="请输入邮箱">
-                    <span id="helpBlockEmail" class="help-block">block</span>
+                    <input type="email" class="form-control" id="email" name="email">
                 </div>
-                <div class="form-group has-error">
+                <div class="form-group">
                     <label class="control-label" for="phone">电话号码</label>
-                    <input type="tel" class="form-control" id="phone" aria-describedby="helpBlockPhone" required data-validation-required-message="请输入电话号码">
-                    <span id="helpBlockPhone" class="help-block">block</span>
+                    <input type="tel" class="form-control" id="phone" name="phone">
                 </div>
-                <div class="form-group has-error">
+                <div class="form-group">
                     <label class="control-label" for="messgae">消息</label>
-                    <textarea class="form-control" rows="3" id="messgae" aria-describedby="helpBlockMessage" required data-validation-required-message="请输入消息"></textarea>
-                    <span id="helpBlockMessage" class="help-block">block</span>
+                    <textarea class="form-control" rows="3" id="messgae" name="message"></textarea>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-info">发送</button>
@@ -35,6 +35,6 @@
     </div>
 </div>
 
-<script src="/lib/jqBootstrapValidation.js"></script>
-<script src="/src/component/contack-check.js"></script>
+<script src="/lib/jquery.validate.min.js"></script>
+<script src="/src/component/contact-check.js"></script>
 <%- include('footer') %>

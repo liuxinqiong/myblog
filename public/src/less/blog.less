@@ -268,7 +268,7 @@ blockquote {
   background: no-repeat center center;
   background-attachment: scroll;
   position: relative;
-  @inlcude background-cover;
+@inlcude background-cover;
   // NOTE: Background images are set within the HTML using inline CSS!
   margin-bottom: 50px;
   .avatar-container {
@@ -676,11 +676,11 @@ footer {
   color: #333;
   margin: 20px auto 0;
   text-align: center;
-  @media only screen and (max-width: 576px){
+  @media only screen and (max-width: 576px) {
     width: 250px;
     height: 200px;
   }
-  a{
+  a {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -693,19 +693,19 @@ footer {
     padding: 3px 6px;
     display: inline-block;
     border-radius: 3px;
-    &.tagc1{
+    &.tagc1 {
       background: #666;
       color: #fff;
     }
-    &.tagc2{
+    &.tagc2 {
       background: #F16E50;
       color: #fff;
     }
-    &.tagc3{
+    &.tagc3 {
       background: #006633;
       color: #fff;
     }
-    &:hover{
+    &:hover {
       color: #fff;
       background: #0099ff;
     }
@@ -810,14 +810,14 @@ footer {
 }
 
 // 上一篇下一篇
-.preAndNext{
+.preAndNext {
   background: #eee;
-  padding:10px;
+  padding: 10px;
   border-radius: 5px;
   font-size: .75rem;
   display: flex;
   flex-direction: row;
-  & a{
+  & a {
     text-decoration: none;
     color: @gray-dark;
     &:hover,
@@ -827,78 +827,26 @@ footer {
       .transition-all;
     }
   }
-  &>div{
+  & > div {
     flex: 1;
   }
-  &>div:first-child{
+  & > div:first-child {
     text-align: left;
   }
-  &>div:last-child{
+  & > div:last-child {
     text-align: right;
   }
 }
 
-// 联系 表单样式
-.floating-label-form-group {
-  font-size: 14px;
-  position: relative;
-  margin-bottom: 0;
-  padding-bottom: 0.5em;
-  border-bottom: 1px solid @gray-lighter;
-  input,
-  textarea {
-    z-index: 1;
-    position: relative;
-    padding: 0;
-    border: none;
-    border-radius: 0;
-    font-size: 1.5em;
-    background: none;
-    box-shadow: none !important;
-    resize: none;
-    &::-webkit-input-placeholder {
-      color: @gray-light;
+//联系
+.contact-container {
+  .more {
+    color: #026ed2;
+    text-decoration: none;
+    font-weight: 600;
+    &:hover{
+      color: #0079ec;
+      border-bottom: 3px solid #f1ece9;
     }
   }
-  label {
-    display: block;
-    z-index: 0;
-    position: relative;
-    top: 2em;
-    margin: 0;
-    font-size: 0.85em;
-    line-height: 1.764705882em;
-    vertical-align: middle;
-    vertical-align: baseline;
-    opacity: 0;
-    -webkit-transition: top 0.3s ease, opacity 0.3s ease;
-    -moz-transition: top 0.3s ease, opacity 0.3s ease;
-    -ms-transition: top 0.3s ease, opacity 0.3s ease;
-    transition: top 0.3s ease, opacity 0.3s ease;
-  }
-  .help-block {
-    margin: 15px 0;
-  }
 }
-
-.floating-label-form-group-with-value {
-  label {
-    top: 0;
-    opacity: 1;
-  }
-}
-
-.floating-label-form-group-with-focus {
-  label {
-    color: @theme-primary;
-  }
-}
-
-form .form-group:first-child .floating-label-form-group {
-  border-top: 1px solid @gray-lighter;
-}
-
-
-
-
-
