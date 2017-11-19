@@ -718,6 +718,8 @@ footer .copyright {
   position: relative;
   top: 3px;
   left: 20px;
+  color: #1f1f1f;
+  font-weight: 300;
 }
 .posts-collapse .collection-title {
   position: relative;
@@ -810,6 +812,10 @@ footer .copyright {
 }
 .preAndNext > div:last-child {
   text-align: right;
+}
+.contact-container {
+  color: #1f1f1f;
+  font-weight: 300;
 }
 .contact-container .more {
   color: #026ed2;
