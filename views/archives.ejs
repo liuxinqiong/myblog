@@ -12,9 +12,9 @@
 <hr>
 <script>
     function collapseToggle(obj) {
-        var $obj=$(obj);
+        var $obj = $(obj);
         $obj.prev().toggleClass('fa-minus-circle fa-plus-circle');
-        $('#archives-year-'+$obj.text()).fadeToggle();
+        $('#archives-year-' + $obj.text()).fadeToggle();
     }
 
     $(document).ready(function () {
@@ -23,6 +23,7 @@
             url: '/posts/archives',
             dataType: 'json',
             success: function (data) {
+                var startTime = new Date();
                 var html = '<span class="archive-move-on"></span><span class="archive-page-counter">嗯哈！目前共计' + data.length + '篇，继续努力</span>';
                 var archives = {};
                 for (var i = 0; i < data.length; i++) {
@@ -35,26 +36,32 @@
                         archives[year] = [post];
                     }
                 }
-                for (var attr in archives) {
+                // 浏览器会对属性进行升序排列
+                var newKeys = Object.keys(archives).sort(function (a, b) {
+                    return b - a;
+                });
+                for (var i = 0; i < newKeys.length; i++) {
+                    var attr = newKeys[i];
                     // fa-minus-circle fa-plus-circle
-                    html += '<div class="collection-title"><h2 class="archive-year motion-element"><i class="fa fa-minus-circle"></i><a href="javascript:void(0)" onclick="collapseToggle(this)">' + attr + '</a></h2></div><div id="archives-year-'+attr+'">';
+                    html += '<div class="collection-title"><h2 class="archive-year motion-element"><i class="fa fa-minus-circle"></i><a href="javascript:void(0)" onclick="collapseToggle(this)">' + attr + '</a></h2></div><div id="archives-year-' + attr + '">';
                     for (var j = 0; j < archives[attr].length; j++) {
                         var post = archives[attr][j];
                         html += '<article class="post post-type-normal"> ' +
                                 '<header class="post-header"> ' +
                                 '<h1 class="post-title"> ' +
-                                '<a class="post-title-link" href="/posts/'+post._id+'"><span>' + post.title +
+                                '<a class="post-title-link" href="/posts/' + post._id + '"><span>' + post.title +
                                 '</span></a> ' +
                                 '</h1> ' +
                                 '<div class="post-meta"> ' +
-                                '<time class="post-time">'+post.created_at+'</time> ' +
+                                '<time class="post-time">' + post.created_at + '</time> ' +
                                 '</div> ' +
                                 '</header> ' +
                                 '</article>';
                     }
-                    html+='</div>';
+                    html += '</div>';
                 }
                 $('#posts-archives').html(html);
+                console.log(new Date().getTime() - startTime);
             },
             error: function (jqXHR, textStatus, errorThrown) {
 
