@@ -148,14 +148,18 @@ router.get('/:postId', function (req, res, next) {
         var prePost = result[2];
         var nextPost = result[3];
         if (!post) {
-            throw new Error('该文章不存在');
+            // throw new Error('该文章不存在');并不友好
+            res.status(404).render('404');
+        } else {
+            // 文章是存在的，但是针对私有文章只有本人可以查看，未登录的或登录人不是作者本人的皆不可查看，同样直接返回404
+            var hasPower = (!post.isPrivate) || (isLogin && req.session.user._id.toString() === post.author._id.toString());
+            hasPower ? res.render('post', {
+                post: post,
+                prePost: prePost[0] || {},// 返回为数组，默认去第一条，不存在返回空
+                nextPost: nextPost[0] || {},
+                comments: comments
+            }):res.status(404).render('404');
         }
-        res.render('post', {
-            post: post,
-            prePost: prePost[0] || {},// 返回为数组，默认去第一条，不存在返回空
-            nextPost: nextPost[0] || {},
-            comments: comments
-        });
     }).catch(next);
 });
 
