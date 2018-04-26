@@ -18,16 +18,16 @@ router.post('/', function (req, res, next) {
     var message = req.fields.message;
     // 校验参数
     try {
-        if (!(name && name.trim().length>0)) {
+        if (!(name && name.trim().length > 0)) {
             throw new Error('名字不能为空');
         }
-        if (!(email && email.trim().length>0)) {
+        if (!(email && email.trim().length > 0)) {
             throw new Error('邮箱不能为空');
         }
-        if (!(phone && phone.trim().length>0)) {
+        if (!(phone && phone.trim().length > 0)) {
             throw new Error('手机号码不能为空');
         }
-        if (!(message && message.trim().length>0)) {
+        if (!(message && message.trim().length > 0)) {
             throw new Error('消息不能为空');
         }
     } catch (e) {
@@ -41,12 +41,12 @@ router.post('/', function (req, res, next) {
         message: message
     }).then(function (result) {
         // 发送邮件
-        var body = '<h1>Sky 博客</h1>';
+        var body = '<h1>Ethan 博客</h1>';
         if (name) body += '名字:<br><pre>' + name + '</pre><br>';
         if (email) body += '邮箱:<br><pre>' + email + '</pre><br>';
         if (phone) body += '电话:<br><pre>' + phone + '</pre><br>';
         if (message) body += '内容:<br><pre>' + message + '</pre><br>';
-        emailService.sendNotification('有人在找你呢',body);
+        emailService.sendNotification('有人在找你呢', body);
         req.flash('success', '发送成功');
         res.redirect('/contact');
     }).catch(next);

@@ -1,14 +1,14 @@
 {
-  "name": "Sky | 博客",
+  "name": "Ethan | 博客",
   "version": "1.0.0",
-  "description": "Sky的博客，欢迎访问交流",
+  "description": "Ethan的博客，欢迎访问交流",
   "main": "index.js",
   "website": "pig1024.me",
-  "keywords": "Sky,liuxinqiong,技术生活博客",
+  "keywords": "Ethan,liuxinqiong,技术生活博客",
   "scripts": {
     "test": "node --harmony ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha"
   },
-  "author": "Sky",
+  "author": "Ethan",
   "license": "MIT",
   "repository": "https://github.com/liuxinqiong/myblog",
   "dependencies": {
