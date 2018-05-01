@@ -4,6 +4,7 @@
 var marked = require('marked');
 var Post = require('../lib/mongo').Post;
 var CommentModel = require('./comments');
+var redis = require('../lib/redisClient')
 
 // 给 post 添加留言数 commentsCount
 Post.plugin('addCommentsCount', {
@@ -64,49 +65,75 @@ Post.plugin('contentToMark', {
     }
 });
 
+/**
+ * TODO 刷新缓存是否有更加优雅的方式，目前管了更新文章
+ * 1. 用户信息修改 缓存如何刷新
+ * 2. 新增评论 缓存如何刷新
+ */
+
+function getPostById(postId) {
+    return Post
+        .findOne({ _id: postId })
+        .populate({ path: 'author', model: 'User' })
+        .addCreatedAt()
+        .addCommentsCount()
+        .contentToHtml()
+        .exec();
+}
+
 module.exports = {
     // 创建一篇文章
     create: function create(post) {
         return Post.create(post).exec();
     },
 
-    // 通过文章 id 获取一篇文章
-    getPostById: function getPostById(postId) {
-        return Post
-            .findOne({_id: postId})
-            .populate({path: 'author', model: 'User'})
-            .addCreatedAt()
-            .addCommentsCount()
-            .contentToHtml()
-            .exec();
+    getPostByIdWithCache: function (postId) {
+        return new Promise((resolve, reject) => {
+            redis.get(postId, function (err, reply) {
+                if (err) {
+                    throw new Error('redis error')
+                } else if (reply) {
+                    resolve(JSON.parse(reply));
+                } else {
+                    getPostById(postId).then(result => {
+                        redis.set(postId, JSON.stringify(result), () => {
+                            resolve(result)
+                        })
+                    })
+                }
+            })
+        })
     },
 
+    // 通过文章 id 获取一篇文章
+    getPostById: getPostById,
+
     // 得到上一篇文章
-    getPrePostByCurId:function getPrePostByCurId(curId,isLogin) {
-        var query={'_id':{'$gt':curId}};
+    getPrePostByCurId: function getPrePostByCurId(curId, isLogin) {
+        var query = { '_id': { '$gt': curId } };
         if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate = {"$ne":true};
+            query.isPrivate = { "$ne": true };
         }
         return Post
             .find(query)
-            .select({'_id':1,'title':1,'tags':1})
-            .sort({_id: 1})// 升序
+            .select({ '_id': 1, 'title': 1, 'tags': 1 })
+            .sort({ _id: 1 })// 升序
             .limit(1)
             .exec();
     },
 
     // 得到下一篇文章
-    getNextPostByCurId:function getNextPostByCurId(curId,isLogin) {
-        var query={'_id':{'$lt':curId}};
+    getNextPostByCurId: function getNextPostByCurId(curId, isLogin) {
+        var query = { '_id': { '$lt': curId } };
         if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate = {"$ne":true};
+            query.isPrivate = { "$ne": true };
         }
         return Post
             .find(query)
-            .select({'_id':1,'title':1,'tags':1})
-            .sort({_id: -1})// 降序
+            .select({ '_id': 1, 'title': 1, 'tags': 1 })
+            .sort({ _id: -1 })// 降序
             .limit(1)
             .exec();
     },
@@ -126,7 +153,7 @@ module.exports = {
         }
         if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate = {"$ne":true};
+            query.isPrivate = { "$ne": true };
         }
         return Post
             .count(query)
@@ -151,15 +178,15 @@ module.exports = {
         }
         if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate = {"$ne":true};
+            query.isPrivate = { "$ne": true };
         }
         return Post
             .find(query, {
                 skip: (page - 1) * 5,
                 limit: 5
             })
-            .populate({path: 'author', model: 'User'})
-            .sort({_id: -1})
+            .populate({ path: 'author', model: 'User' })
+            .sort({ _id: -1 })
             .addCreatedAt()
             .addCommentsCount()
             .contentToHtml()
@@ -172,12 +199,12 @@ module.exports = {
         var query = {};
         if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate = {"$ne":true};
+            query.isPrivate = { "$ne": true };
         }
         return Post
             .find(query)
-            .select({'_id':1,'title':1,'tags':1})
-            .sort({_id: -1})
+            .select({ '_id': 1, 'title': 1, 'tags': 1 })
+            .sort({ _id: -1 })
             .addCreatedAt()
             .exec();
     },
@@ -191,21 +218,21 @@ module.exports = {
         }
         if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate = {"$ne":true};
+            query.isPrivate = { "$ne": true };
         }
         return Post
             .find(query)
-            .select({'_id':1,'title':1,'tags':1})
-            .sort({_id: -1})
+            .select({ '_id': 1, 'title': 1, 'tags': 1 })
+            .sort({ _id: -1 })
             .exec();
     },
 
     // 得到所有标签
     getTags: function (isLogin) {
-        var query = {tags: {"$ne": ""}};
+        var query = { tags: { "$ne": "" } };
         if (!isLogin) {
             // 非登录只能看非私有
-            query.isPrivate = {"$ne":true};
+            query.isPrivate = { "$ne": true };
         }
         return Post
             .distinct('tags', query)
@@ -215,26 +242,38 @@ module.exports = {
     // 通过文章 id 给 pv 加 1
     incPv: function incPv(postId) {
         return Post
-            .update({_id: postId}, {$inc: {pv: 1}})
+            .update({ _id: postId }, { $inc: { pv: 1 } })
             .exec();
     },
 
     // 通过文章 id 获取一篇原生文章（编辑文章）
     getRawPostById: function getRawPostById(postId) {
         return Post
-            .findOne({_id: postId})
-            .populate({path: 'author', model: 'User'})
+            .findOne({ _id: postId })
+            .populate({ path: 'author', model: 'User' })
             .exec();
     },
 
     // 通过用户 id 和文章 id 更新一篇文章
     updatePostById: function updatePostById(postId, author, data) {
-        return Post.update({author: author, _id: postId}, {$set: data}).exec();
+        // TODO:mongolass 嵌入 redis 不方便，待优化
+        return new Promise((resolve, reject) => {
+            Post.update({ author: author, _id: postId }, { $set: data }).exec().then(result => {
+                // 刷新缓存
+                getPostById(postId).then(post => {
+                    redis.set(postId, JSON.stringify(post), (err) => {
+                        resolve(result)
+                    })
+                })
+
+            })
+        })
+        // return Post.update({ author: author, _id: postId }, { $set: data }).exec();
     },
 
     // 通过用户 id 和文章 id 删除一篇文章
     delPostById: function delPostById(postId, author) {
-        return Post.remove({author: author, _id: postId})
+        return Post.remove({ author: author, _id: postId })
             .exec()
             .then(function (res) {
                 // 文章删除后，再删除该文章下的所有留言

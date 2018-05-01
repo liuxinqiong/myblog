@@ -137,7 +137,7 @@ router.get('/:postId', function (req, res, next) {
     if (req.session.user)
         isLogin = true;
     Promise.all([
-        PostModel.getPostById(postId),// 获取文章信息
+        PostModel.getPostByIdWithCache(postId),// 获取文章信息
         CommentModel.getComments(postId),// 获取该文章所有留言
         PostModel.getPrePostByCurId(postId, isLogin),// 获取上一篇
         PostModel.getNextPostByCurId(postId, isLogin),// 获取下一篇
@@ -158,7 +158,7 @@ router.get('/:postId', function (req, res, next) {
                 prePost: prePost[0] || {},// 返回为数组，默认去第一条，不存在返回空
                 nextPost: nextPost[0] || {},
                 comments: comments
-            }):res.status(404).render('404');
+            }) : res.status(404).render('404');
         }
     }).catch(next);
 });
@@ -191,7 +191,7 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
     var content = req.fields.content;
     var tags = req.fields.tags;
     var isPrivate = req.fields.isPrivate ? true : false;
-    PostModel.updatePostById(postId, author, {title: title, content: content, tags: tags, isPrivate: isPrivate})
+    PostModel.updatePostById(postId, author, { title: title, content: content, tags: tags, isPrivate: isPrivate })
         .then(function () {
             req.flash('success', '编辑文章成功');
             // 编辑成功后跳转到上一页
