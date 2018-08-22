@@ -14,6 +14,7 @@ var errorDomain = require('./middlewares/error-domain')
 var credentials = require('./config/credentials');
 var emailService = require('./lib/email.js')(credentials);
 // var vhost = require('vhost');
+var cookieParser = require('cookie-parser')
 
 var app = express();
 
@@ -34,6 +35,8 @@ app.use(errorDomain({
 
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(cookieParser());
 
 // session 中间件
 app.use(session({

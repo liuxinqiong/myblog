@@ -11,6 +11,7 @@
                 <a href="https://cv.pig1024.me" class="more">more…</a>
             </p>
             <form method="post" id="contactForm">
+                <input type="hidden" name="_csrf" value="<%=csrfToken%>">
                 <div class="form-group">
                     <label class="control-label" for="name">姓名</label>
                     <input type="text" class="form-control" id="name" name="name">

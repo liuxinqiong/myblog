@@ -8,7 +8,11 @@ var credentials = require('../config/credentials');
 var emailService = require('../lib/email.js')(credentials);
 
 router.get('/', function (req, res, next) {
-    res.render('contact');
+    var csrfToken = parseInt(Math.random() * 100000, 10)
+    res.cookie('_csrf', csrfToken)
+    res.render('contact', {
+        csrfToken
+    });
 });
 
 router.post('/', function (req, res, next) {
@@ -16,8 +20,14 @@ router.post('/', function (req, res, next) {
     var email = req.fields.email;
     var phone = req.fields.phone;
     var message = req.fields.message;
+    var _csrf = req.fields._csrf;
+    var _csrfToken = req.cookies._csrf;
     // 校验参数
     try {
+        // 防御CSRF攻击
+        if(_csrf !== _csrfToken) {
+            throw new Error('非法请求');
+        }
         if (!(name && name.trim().length > 0)) {
             throw new Error('名字不能为空');
         }
