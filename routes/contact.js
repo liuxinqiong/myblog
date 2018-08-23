@@ -25,7 +25,7 @@ router.post('/', function (req, res, next) {
     // 校验参数
     try {
         // 防御CSRF攻击
-        if(_csrf !== _csrfToken) {
+        if(!_csrf || !_csrfToken || _csrf !== _csrfToken) {
             throw new Error('非法请求');
         }
         if (!(name && name.trim().length > 0)) {
