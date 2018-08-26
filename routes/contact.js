@@ -8,7 +8,7 @@ var credentials = require('../config/credentials');
 var emailService = require('../lib/email.js')(credentials);
 
 router.get('/', function (req, res, next) {
-    var csrfToken = parseInt(Math.random() * 100000, 10)
+    var csrfToken = parseInt(Math.random() * 999999999, 10)
     res.cookie('_csrf', csrfToken)
     res.render('contact', {
         csrfToken
@@ -28,6 +28,7 @@ router.post('/', function (req, res, next) {
         if(!_csrf || !_csrfToken || _csrf !== _csrfToken) {
             throw new Error('非法请求');
         }
+        console.log("csrf check", _csrf, _csrfToken)
         if (!(name && name.trim().length > 0)) {
             throw new Error('名字不能为空');
         }
