@@ -6,7 +6,9 @@
   "website": "pig1024.me",
   "keywords": "Ethan,liuxinqiong,技术生活博客",
   "scripts": {
-    "test": "node --harmony ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha"
+    "test": "node --harmony ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha",
+    "dev-server": "nodemon blog.js",
+    "dev-client": "gulp dev"
   },
   "author": "Ethan",
   "license": "MIT",

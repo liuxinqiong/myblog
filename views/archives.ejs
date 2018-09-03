@@ -11,10 +11,29 @@
 </div>
 <hr>
 <script>
+    // 后期模块化优化
     function collapseToggle(obj) {
         var $obj = $(obj);
-        $obj.prev().toggleClass('fa-minus-circle fa-plus-circle');
-        $('#archives-year-' + $obj.text()).fadeToggle();
+        $obj.prev().toggleClass('fa-minus fa-plus');
+        $obj.parent().parent().find('.archives-target-' + $obj.text()).fadeToggle();
+    }
+
+    function month2En(key) {
+        var data = {
+            1: 'aJanuary',
+            2: 'bFebruary',
+            3: 'cMarch',
+            4: 'dApril',
+            5: 'eMay',
+            6: 'fJune',
+            7: 'gJuly',
+            8: 'hAugust',
+            9: 'iSeptember',
+            10: 'jOctober',
+            11: 'kNovember',
+            12: 'lDecember'
+        }
+        return data[parseInt(key)]
     }
 
     $(document).ready(function () {
@@ -24,44 +43,52 @@
             dataType: 'json',
             success: function (data) {
                 var startTime = new Date();
-                var html = '<span class="archive-move-on"></span><span class="archive-page-counter">嗯哈！目前共计' + data.length + '篇，继续努力</span>';
+                var html = '<div>嗯哈！目前共计' + data.length + '篇，继续努力</div>';
                 var archives = {};
                 for (var i = 0; i < data.length; i++) {
                     var post = data[i];
                     var year = post.created_at.substring(0, 4);
-                    post.created_at = post.created_at.substring(5, 10);
-                    if (archives[year] instanceof Array) {
-                        archives[year].push(post);
+                    var month = month2En(post.created_at.substring(5, 7));
+                    if (archives[year] instanceof Object) {
+                        if(archives[year][month] instanceof Array) {
+                            archives[year][month].push(post);
+                        } else {
+                            archives[year][month] = [post]
+                        }
                     } else {
-                        archives[year] = [post];
+                        archives[year] = {};
+                        archives[year][month] = [post]
                     }
                 }
                 // 浏览器会对属性进行升序排列
                 var newKeys = Object.keys(archives).sort(function (a, b) {
                     return b - a;
                 });
+                var monthKeys = {}
+                Object.keys(archives).forEach(function(element) {
+                    monthKeys[element] = Object.keys(archives[element]).sort(function(a, b) {
+                        return b - a;
+                    })
+                });
                 for (var i = 0; i < newKeys.length; i++) {
                     var attr = newKeys[i];
-                    // fa-minus-circle fa-plus-circle
-                    html += '<div class="collection-title"><h2 class="archive-year motion-element"><i class="fa fa-minus-circle"></i><a href="javascript:void(0)" onclick="collapseToggle(this)">' + attr + '</a></h2></div><div id="archives-year-' + attr + '">';
-                    for (var j = 0; j < archives[attr].length; j++) {
-                        var post = archives[attr][j];
-                        html += '<article class="post post-type-normal"> ' +
-                                '<header class="post-header"> ' +
-                                '<h1 class="post-title"> ' +
-                                '<a class="post-title-link" href="/posts/' + post._id + '"><span>' + post.title +
-                                '</span></a> ' +
-                                '</h1> ' +
-                                '<div class="post-meta"> ' +
-                                '<time class="post-time">' + post.created_at + '</time> ' +
-                                '</div> ' +
-                                '</header> ' +
-                                '</article>';
+                    html += '<div class="year-container"><h4 class="archive-title"><i class="fa fa-minus" aria-hidden="true"></i><a href="javascript:void(0)" onclick="collapseToggle(this)">' + attr + '</a></h4><ul class="month-container archives-target-' + attr + '">';
+                    for(var t = 0; t < monthKeys[attr].length; t++) {
+                        var month = monthKeys[attr][t]
+                        var monthV = month.substring(1)
+                        html += '<h5 class="archive-title"><i class="fa fa-minus" aria-hidden="true"></i><a href="javascript:void(0)" onclick="collapseToggle(this)">'+ monthV +'</a></h5><div class="archives-target-' + monthV + '">'
+                        for (var j = 0; j < archives[attr][month].length; j++) {
+                            var post = archives[attr][month][j];
+                            html += '<li><i class="fa fa-caret-right" aria-hidden="true"></i>' +
+                                    '<a class="archive-post-title" href="/posts/' + post._id + '">' + post.title + '</a>' +
+                                    '<span class="archive-post-date"> - '+ post.created_at +'</span></li>'
+                        }
+                        html += '</div>'
                     }
-                    html += '</div>';
+                    html += '</ul></div>';
                 }
                 $('#posts-archives').html(html);
-                console.log(new Date().getTime() - startTime);
+                console.log('本次耗时'+ (new Date().getTime() - startTime) +'ms');
             },
             error: function (jqXHR, textStatus, errorThrown) {
 
