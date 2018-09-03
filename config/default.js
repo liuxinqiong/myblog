@@ -10,8 +10,8 @@ module.exports = {
     },
     redis: {
         port: 6379,
-        host: '120.76.244.22',
-        password: 'Betterlife0708!'
+        host: 'localhost',
+        password: null
     },
-    mongodb: 'mongodb://sky:Betterlife0708!@120.76.244.22:10008/myblog'
+    mongodb: 'mongodb://localhost:27017/myblog'
 }
