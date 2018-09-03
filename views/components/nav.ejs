@@ -14,9 +14,9 @@
                 <li class="nav-item">
                     <% if (user) { %>
                         <a class="nav-link page-scroll" href="/posts?author=<%= user._id %>">主页</a>
-                        <% } else { %>
-                            <a class="nav-link page-scroll" href="/posts">主页</a>
-                            <% } %>
+                    <% } else { %>
+                        <a class="nav-link page-scroll" href="/posts">主页</a>
+                    <% } %>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link page-scroll" href="/posts/archives">归档</a>
@@ -44,14 +44,14 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/signout">登出</a>
                             </li>
-                            <% } else { %>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/signin">登录</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/signup">注册</a>
-                                </li>
-                                <% } %>
+                        <% } else { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/signin">登录</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/signup">注册</a>
+                            </li>
+                        <% } %>
                     </ul>
                 </li>
             </ul>
@@ -59,7 +59,7 @@
     </div>
 </nav>
 <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/asset/img/home-bg.jpg')">
+<header class="intro-header" style="background-image: url('https://source.unsplash.com/random/')">
     <div class="container">
         <div class="row">
             <div class="col-lg-2 col-md-1 col-sm-1 col-xs-1">
@@ -67,7 +67,7 @@
                     <div class="avatar-container">
                         <img src="/img/<%= user.avatar %>" class="img-responsive center-block img-circle hidden-print hidden-xs hidden-sm">
                     </div>
-                    <% } %>
+                <% } %>
             </div>
             <div class="col-lg-8 col-md-10 col-sm-10 col-xs-10">
                 <div class="site-heading">
@@ -76,9 +76,9 @@
                         <span class="subheading">
                             <%= user.bio %>
                         </span>
-                        <% }else{ %>
-                            <span class="subheading">Ethan的博客，欢迎访问交流</span>
-                            <% } %>
+                    <% }else{ %>
+                        <span class="subheading">Ethan的博客，欢迎访问交流</span>
+                    <% } %>
                 </div>
             </div>
         </div>
