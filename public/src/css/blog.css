@@ -613,8 +613,8 @@ footer .copyright {
   border-radius: 5px;
 }
 #auto_complete_container > ul > li {
+  list-style-type: none;
   padding: 5px;
-  height: 30px;
 }
 #auto_complete_container > ul > li > a {
   width: 100%;
@@ -627,6 +627,12 @@ footer .copyright {
 #auto_complete_container > ul > li > a:focus {
   text-decoration: none;
   color: #0085A1;
+  background: #ddd;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  transition: all 0.5s;
+}
+#auto_complete_container > ul > li.active {
   background: #ddd;
   -webkit-transition: all 0.5s;
   -moz-transition: all 0.5s;

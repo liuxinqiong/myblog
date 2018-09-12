@@ -631,8 +631,8 @@ footer {
     background: #eee;
     border-radius: 5px;
     > li {
+      list-style-type: none;
       padding: 5px;
-      height: 30px;
       > a {
         width: 100%;
         padding: 5px;
@@ -646,6 +646,10 @@ footer {
           background: #ddd;
           .transition-all;
         }
+      }
+      &.active {
+        background: #ddd;
+        .transition-all;
       }
     }
   }

@@ -1,5 +1,6 @@
 {
-  "name": "Ethan | 博客",
+  "name": "blog.pig1024.me",
+  "title": "Ethan | 博客",
   "version": "1.0.0",
   "description": "Ethan的博客，欢迎访问交流",
   "main": "index.js",
@@ -15,6 +16,7 @@
   "license": "MIT",
   "repository": "https://github.com/liuxinqiong/myblog",
   "dependencies": {
+    "axios": "^0.18.0",
     "browser-sync": "^2.18.12",
     "cluster": "^0.7.7",
     "config-lite": "^2.0.0",

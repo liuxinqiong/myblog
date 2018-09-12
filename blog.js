@@ -77,7 +77,7 @@ app.use(require('./middlewares/express-formidable')({
 
 // 设置模板全局常量
 app.locals.blog = {
-    title: pkg.name,
+    title: pkg.title,
     description: pkg.description,
     website: pkg.website,
     author: pkg.author,
@@ -147,7 +147,7 @@ app.use(function (err, req, res, next) {
 // 监听端口，启动程序。直接启动 index.js 则会监听端口启动程序，如果 index.js 被 require 了，则导出 app，通常用于测试。
 function startServer() {
     server.listen(config.port, function () {
-        console.log(`${pkg.name} started in ${app.get('env')} mode on port ${config.port}`);
+        console.log(`${pkg.title} started in ${app.get('env')} mode on port ${config.port}`);
     });
 }
 
@@ -158,6 +158,6 @@ if (module.parent) {
     // 监听端口，启动程序
     startServer();
     // app.listen(config.port, function () {
-    //     console.log(`${pkg.name} listening on port ${config.port}`);
+    //     console.log(`${pkg.title} listening on port ${config.port}`);
     // });
 }

@@ -66,9 +66,10 @@ Post.plugin('contentToMark', {
 });
 
 /**
- * TODO 刷新缓存是否有更加优雅的方式，目前管了更新文章
+ * TODO:刷新缓存是否有更加优雅的方式，目前仅管了更新文章
  * 1. 用户信息修改 缓存如何刷新
  * 2. 新增评论 缓存如何刷新
+ * 3. PV不准确
  */
 
 function getPostById(postId) {
@@ -265,7 +266,6 @@ module.exports = {
                         resolve(result)
                     })
                 })
-
             })
         })
         // return Post.update({ author: author, _id: postId }, { $set: data }).exec();
