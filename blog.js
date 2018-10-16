@@ -5,16 +5,19 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var flash = require('connect-flash');
 var config = require('config-lite')(__dirname);
-var routes = require('./routes');
-var pkg = require('./package');
 var winston = require('winston');
 var expressWinston = require('express-winston');
+var cookieParser = require('cookie-parser')
 // var bodyParser = require("body-parser");
+// var vhost = require('vhost');
+
+var routes = require('./routes');
+var pkg = require('./package');
 var errorDomain = require('./middlewares/error-domain')
 var credentials = require('./config/credentials');
 var emailService = require('./lib/email.js')(credentials);
-// var vhost = require('vhost');
-var cookieParser = require('cookie-parser')
+var badContentType = require('./middlewares/bad-content-type')
+var cros = require('./middlewares/cros')
 
 var app = express();
 
@@ -40,39 +43,27 @@ app.use(cookieParser());
 
 // session 中间件
 app.use(session({
-    name: config.session.key,// 设置 cookie 中保存 session id 的字段名称
-    secret: config.session.secret,// 通过设置 secret 来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
-    resave: true,// 强制更新 session
-    saveUninitialized: false,// 设置为 false，强制创建一个 session，即使用户未登录
+    name: config.session.key, // 设置 cookie 中保存 session id 的字段名称
+    secret: config.session.secret, // 通过设置 secret 来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
+    resave: true, // 强制更新 session
+    saveUninitialized: false, // 设置为 false，强制创建一个 session，即使用户未登录
     cookie: {
-        maxAge: config.session.maxAge// 过期时间，过期后 cookie 中的 session id 自动删除
+        maxAge: config.session.maxAge // 过期时间，过期后 cookie 中的 session id 自动删除
     },
-    store: new MongoStore({// 将 session 存储到 mongodb
-        url: config.mongodb// mongodb 地址
+    store: new MongoStore({ // 将 session 存储到 mongodb
+        url: config.mongodb // mongodb 地址
     })
 }));
 
 // flash 中间件，用来显示通知
 app.use(flash());
 
-// 一些奇怪请求头导致formidable报错
-app.use(function (req, res, next) {
-    if (req.headers['content-type']) {
-        if (req.headers['content-type'].match(/octet-stream/i) || req.headers['content-type'].match(/urlencoded/i) ||
-            req.headers['content-type'].match(/multipart/i) || req.headers['content-type'].match(/json/i)) {
-            next();
-        } else {
-            res.send("Don't mess with me, please");
-        }
-    } else {
-        next();
-    }
-});
+app.use(badContentType)
 
 // 处理表单及文件上传的中间件,本质使用formidable，进行了简单中间件处理
 app.use(require('./middlewares/express-formidable')({
-    uploadDir: path.join(__dirname, 'public/img'),// 上传文件目录
-    keepExtensions: true// 保留后缀
+    uploadDir: path.join(__dirname, 'public/img'), // 上传文件目录
+    keepExtensions: true // 保留后缀
 }));
 
 // 设置模板全局常量
@@ -96,7 +87,7 @@ app.use(function (req, res, next) {
 app.use(expressWinston.logger({
     transports: [
         // 避免日志太多，控制台不打印正常日志
-        new (winston.transports.Console)({
+        new(winston.transports.Console)({
             json: true,
             colorize: true
         }),
@@ -106,15 +97,9 @@ app.use(expressWinston.logger({
     ]
 }));
 
-// 线上环境是Nginx代理，为避免重复请求头问题，因此限定开发环境才设置允许跨域
 if (app.get('env') === 'development') {
-    app.all('*', function (req, res, next) {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
-        res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-        if (req.method == "OPTIONS") res.send(200);/*让options预检请求快速返回*/
-        else  next();
-    });
+    // 线上环境是Nginx代理，为避免重复请求头问题，因此限定开发环境才设置允许跨域
+    app.all('*', cros);
 }
 
 app.disable('x-powered-by');

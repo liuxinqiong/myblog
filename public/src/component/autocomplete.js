@@ -3,12 +3,13 @@
  */
 
 $(document).ready(function () {
+    /**
+     * add auto_complete_container
+     */
     var auto_self = $('#searchText');
-
     var container = document.createElement('div');
     var $container = $(container);
     $container.attr('id', 'auto_complete_container');
-
     auto_self.parent().append($container);
 
     function fixAutoCompleteContainerPos() {
@@ -26,17 +27,13 @@ $(document).ready(function () {
     }
     fixAutoCompleteContainerPos();
 
-    $(document.body).on('click', function (e) {
-        console.log(e)
-        $container.html('');
-    })
-    $('#searchText').on('click', function(e) {
-        e.stopPropagation()
-    })
     $(window).on('resize', function () {
         fixAutoCompleteContainerPos();
     })
 
+    /**
+     * send ajax
+     */
     var request = null;
     $('#searchText').on('input', function (e) {
         var value = $(this).val();
@@ -64,12 +61,19 @@ $(document).ready(function () {
         request = ajaxUtil.send();
     });
 
+    /**
+     * key up|down
+     */
+    $('#searchText').on('click', function(e) {
+        e.stopPropagation()
+    })
     $('#searchText').on('focus', function() {
         $(document).on('keydown', keyHandler)
+        $(document.body).on('click', emptyContainer)
     })
-
     $('#searchText').on('blur', function() {
         $(document).off('keydown', keyHandler)
+        $(document.body).off('click', emptyContainer)
     })
 
     function keyHandler(e) {
@@ -94,8 +98,9 @@ $(document).ready(function () {
         }
     }
 
-    // 自动聚焦 autofocus在页面加载时就聚焦， 此时本js未完成加载，导致相关逻辑失效，因此采用js完成自动聚焦
-    $('#searchText').focus()
+    function emptyContainer() {
+        $container.html('');
+    }
 
     $('#searchForm').on('submit', function(e) {
         var target = $container.find('ul>li.active')
@@ -108,6 +113,10 @@ $(document).ready(function () {
         // 避免触发 body click 事件
         e.stopPropagation()
     })
+
+    // 自动聚焦 autofocus在页面加载时就聚焦， 此时本js未完成加载，导致相关逻辑失效，因此采用js完成自动聚焦
+    $('#searchText').focus()
+
 });
 
 
