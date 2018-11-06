@@ -6,29 +6,27 @@ var router = express.Router();
 var ContactModel = require('../models/contact');
 var credentials = require('../config/credentials');
 var emailService = require('../lib/email.js')(credentials);
+var csrfProtection = require('csurf')({
+    cookie: true,
+    value: function(req) {
+        // 默认通过req.body读取，因此重写
+        return req.fields._csrf
+    }
+})
 
-router.get('/', function (req, res, next) {
-    var csrfToken = parseInt(Math.random() * 999999999, 10)
-    res.cookie('_csrf', csrfToken)
+router.get('/', csrfProtection, function (req, res, next) {
     res.render('contact', {
-        csrfToken
+        csrfToken: req.csrfToken()
     });
 });
 
-router.post('/', function (req, res, next) {
+router.post('/', csrfProtection, function (req, res, next) {
     var name = req.fields.name;
     var email = req.fields.email;
     var phone = req.fields.phone;
     var message = req.fields.message;
-    var _csrf = req.fields._csrf;
-    var _csrfToken = req.cookies._csrf;
     // 校验参数
     try {
-        // 防御CSRF攻击
-        if(!_csrf || !_csrfToken || _csrf !== _csrfToken) {
-            throw new Error('非法请求');
-        }
-        console.log("csrf check", _csrf, _csrfToken)
         if (!(name && name.trim().length > 0)) {
             throw new Error('名字不能为空');
         }

@@ -33,7 +33,7 @@ app.use(errorDomain({
     killTimeout: 5000
 }));
 
-// 设置body解析,这个很关键，貌似不需要了,通过req.fields读取，formidable很牛逼的样子
+// 设置body解析, 但本项目使用formidable中间件，可同时处理表单和文件（req.fields），因此可不使用
 // app.use(bodyParser.urlencoded({ extended: false }));
 
 // 设置静态文件目录
@@ -122,11 +122,16 @@ app.use(expressWinston.errorLogger({
 
 // error page
 app.use(function (err, req, res, next) {
-    console.log('我是错误处理器');
-    emailService.emailError('我是错误处理器', err.stack, err.message)
-    res.render('error', {
-        error: err
-    });
+    if(err.code === 'EBADCSRFTOKEN') {
+        console.log('CSRF验证不通过');
+        res.send("Don't mess with me, please");
+    } else {
+        console.log('我是错误处理器');
+        emailService.emailError('我是错误处理器', err.stack, err.message)
+        res.render('error', {
+            error: err
+        });
+    }
 });
 
 // 监听端口，启动程序。直接启动 index.js 则会监听端口启动程序，如果 index.js 被 require 了，则导出 app，通常用于测试。
