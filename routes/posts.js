@@ -42,33 +42,10 @@ router.get('/', function (req, res, next) {
     }).catch(next);
 });
 
-// ajax自动提示
-router.post('/search', function (req, res, next) {
-    var keyword = req.fields.title;
-    var isLogin = false;
-    // 未登录不能看私有文章
-    if (req.session.user)
-        isLogin = true;
-    PostModel.getPostBySearch(keyword, isLogin).then(function (data) {
-        res.json(data);
-    }).catch(next);
-});
-
 // 文章归档页
 router.get('/archives', function (req, res, next) {
     res.render('archives');
 });
-
-// 文章归档
-router.post('/archives', function (req, res, next) {
-    var isLogin = false;
-    // 未登录不能看私有文章
-    if (req.session.user)
-        isLogin = true;
-    PostModel.getArchivePosts(isLogin).then(function (data) {
-        res.json(data);
-    }).catch(next);
-})
 
 // 文章所有标签
 router.get('/tags', function (req, res, next) {

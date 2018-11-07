@@ -3,6 +3,7 @@
  */
 
 $(document).ready(function () {
+
     // 实现拖拽上传
     var area = $('#post-form').find('textarea');
 
@@ -70,7 +71,7 @@ $(document).ready(function () {
             request.onreadystatechange = function (e) {
                 if (request.readyState === 4 && request.status === 200) {
                     var rs = JSON.parse(request.responseText);
-                    if (rs.code == 0) {
+                    if (rs.code == CODE.OK) {
                         var textarea = that[0];
                         var picStr = "";
                         for (i in rs.data) {
@@ -78,7 +79,7 @@ $(document).ready(function () {
                         }
                         insertIntoPositon(textarea, tipStr, picStr);
                     }
-                    if (rs.code == -1) {
+                    if (rs.code == CODE.NOT_LOGIN) {
                         alert(rs.data);
                     }
                 }
@@ -111,36 +112,6 @@ $(document).ready(function () {
                 alert('upload abort');
             }
             request.send(formData);
-
-            /*
-             $.ajax({
-             type:'post',
-             url:'/api/common/upload',
-             data:formData,
-             dataType: 'json',
-             contentType: false,
-             processData: false,//此处指定对上传数据不做默认的读取字符串的操作
-             success:function(rs){
-             if(rs.code==0){
-             var textarea=that[0];
-             var start = textarea.selectionStart;
-             var end = textarea.selectionEnd;
-             var picStr="";
-             for(i in rs.data){
-             picStr+='\n'+'!['+rs.data[i].name+']('+rs.data[i].path+')'+'\n';
-             }
-             textarea.value = textarea.value.substring(0, start) + picStr
-             + textarea.value.substring(end);
-             }
-             if(rs.code==-1){
-             alert(rs.data);
-             }
-             },
-             error:function(jqXHR, textStatus, errorThrown){
-             alert("文件上传出错！");
-             }
-             });
-             */
         }
     });
 });

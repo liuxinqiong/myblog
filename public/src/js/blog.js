@@ -31,3 +31,9 @@ jQuery(document).ready(function ($) {
             });
     }
 });
+
+// 定义编码值
+var CODE = {
+    NOT_LOGIN: 401,
+    OK: 200
+}

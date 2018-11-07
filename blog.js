@@ -11,6 +11,7 @@ var cookieParser = require('cookie-parser')
 // var bodyParser = require("body-parser");
 // var vhost = require('vhost');
 
+var api = require('./api')
 var routes = require('./routes');
 var pkg = require('./package');
 var errorDomain = require('./middlewares/error-domain')
@@ -103,6 +104,9 @@ if (app.get('env') === 'development') {
 }
 
 app.disable('x-powered-by');
+
+// 前后端分离API
+api(app)
 
 // 路由
 routes(app);

@@ -17,3 +17,5 @@ router.post('/upload', checkLogin, function (req, res, next) {
         data: result
     });
 });
+
+module.exports = router;

@@ -49,14 +49,17 @@ $(document).ready(function () {
         var data = JSON.stringify({
             title: value
         });
-        var ajaxUtil = new AjaxUtil('POST', '/posts/search', data, function (data) {
-            var html = '<ul>';
-            for (var i = 0; i < data.length; i++) {
-                var target = data[i];
-                html += '<li><a href="/posts/' + target._id + '">' + target.title + '</a></li>'
+        var ajaxUtil = new AjaxUtil('POST', '/api/posts/search', data, function (data) {
+            if(data.code === CODE.OK) {
+                var html = '<ul>';
+                data = data.data
+                for (var i = 0; i < data.length; i++) {
+                    var target = data[i];
+                    html += '<li><a href="/posts/' + target._id + '">' + target.title + '</a></li>'
+                }
+                html += '</ul>';
+                $container.html(html);
             }
-            html += '</ul>';
-            $container.html(html);
         });
         request = ajaxUtil.send();
     });
