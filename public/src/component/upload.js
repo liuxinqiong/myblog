@@ -66,7 +66,7 @@ $(document).ready(function () {
             }
             tipStr += ' ...]';
             var request = new XMLHttpRequest();
-            request.open('POST', '/file/upload');
+            request.open('POST', '/api/common/upload');
             request.onreadystatechange = function (e) {
                 if (request.readyState === 4 && request.status === 200) {
                     var rs = JSON.parse(request.responseText);
@@ -115,7 +115,7 @@ $(document).ready(function () {
             /*
              $.ajax({
              type:'post',
-             url:'/file/upload',
+             url:'/api/common/upload',
              data:formData,
              dataType: 'json',
              contentType: false,

@@ -11,27 +11,6 @@ var fs = require('fs')
 
 var randomPath = path.resolve('./public/asset/bg')
 
-// POST /signin 用户登录
-router.post('/upload',function (req, res, next) {
-    if (!req.session.user) {
-        return res.json({
-            code:-1,
-            data:'not login,upload failed'
-        });
-    }
-    var result=[];
-    for(attr in req.files){
-        result.push({
-            name:req.files[attr].name,
-            path:'/img/'+req.files[attr].path.split(path.sep).pop()
-        })
-    }
-    res.json({
-        code:0,
-        data:result
-    });
-});
-
 router.get('/random', function(req, res, next) {
     // 模拟 https://source.unsplash.com/random/
     fs.readdir(randomPath, function(err, files) {
