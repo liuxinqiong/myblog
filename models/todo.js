@@ -14,7 +14,7 @@ module.exports = {
     // db.table_name.update(where, setNew, isInsert, multi);
     update: function(todoIds, data) {
         return TODO
-            .update({ _id: { $in: todoIds } }, { $set: data }, false, true)
+            .update({ _id: { $in: todoIds } }, { $set: data }, { multi: true })
             .exec()
     },
     list: function() {
