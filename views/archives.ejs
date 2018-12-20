@@ -69,7 +69,7 @@
                     var monthKeys = {}
                     Object.keys(archives).forEach(function(element) {
                         monthKeys[element] = Object.keys(archives[element]).sort(function(a, b) {
-                            return b - a;
+                            return b.charCodeAt(0) - a.charCodeAt(0);
                         })
                     });
                     for (var i = 0; i < newKeys.length; i++) {
