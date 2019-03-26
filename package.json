@@ -9,6 +9,7 @@
   "scripts": {
     "test": "node --harmony ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha",
     "start": "cross-env NODE_ENV=production forever -s start blog-cluster.js",
+    "restart": "cross-env NODE_ENV=production forever -s restart blog-cluster.js",
     "pro-server": "cross-env NODE_ENV=production nodemon blog.js",
     "dev-server": "nodemon blog.js",
     "dev-client": "gulp dev"
