@@ -25,6 +25,8 @@ router.post('/', csrfProtection, function (req, res, next) {
     var email = req.fields.email;
     var phone = req.fields.phone;
     var message = req.fields.message;
+    var answer = req.fields.answer;
+    var emailUrlWebsite = req.fields['email-url-website']
     // 校验参数
     try {
         if (!(name && name.trim().length > 0)) {
@@ -38,6 +40,11 @@ router.post('/', csrfProtection, function (req, res, next) {
         }
         if (!(message && message.trim().length > 0)) {
             throw new Error('消息不能为空');
+        }
+        // JS 自动填充答案不正确或者应该为空的却有了值
+        if(answer !== new Date().getFullYear() || (emailUrlWebsite && emailUrlWebsite.trim().length > 0)) {
+            console.log('检测到机器人，拒绝操作')
+            throw new Error('发送失败')
         }
     } catch (e) {
         req.flash('error', e.message);

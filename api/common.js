@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var checkLogin = require('../middlewares/check-api').checkLogin
-var CODE = require('./constant')
+var CODE = require('../constant')
 
 router.post('/upload', checkLogin, function (req, res, next) {
     var result=[];

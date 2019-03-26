@@ -5,8 +5,6 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var flash = require('connect-flash');
 var config = require('config-lite')(__dirname);
-var winston = require('winston');
-var expressWinston = require('express-winston');
 var cookieParser = require('cookie-parser')
 // var bodyParser = require("body-parser");
 // var vhost = require('vhost');
@@ -18,7 +16,9 @@ var errorDomain = require('./middlewares/error-domain')
 var credentials = require('./config/credentials');
 var emailService = require('./lib/email.js')(credentials);
 var badContentType = require('./middlewares/bad-content-type')
-var cros = require('./middlewares/cros')
+var cors = require('./middlewares/cors')
+const CODE = require('./constant')
+const logger = require('./middlewares/logger')
 
 var app = express();
 
@@ -84,26 +84,12 @@ app.use(function (req, res, next) {
     next();
 });
 
-// 正常请求的日志
-app.use(expressWinston.logger({
-    transports: [
-        // 避免日志太多，控制台不打印正常日志
-        new(winston.transports.Console)({
-            json: true,
-            colorize: true
-        }),
-        new winston.transports.File({
-            filename: 'logs/success.log'
-        })
-    ]
-}));
-
-if (app.get('env') === 'development') {
-    // 线上环境是Nginx代理，为避免重复请求头问题，因此限定开发环境才设置允许跨域
-    app.all('*', cros);
-}
-
+// 处理 cors，线上环境已被 nginx 代理，仅开发环境开启
+app.use(cors(app.get('env') === 'development'));
 app.disable('x-powered-by');
+
+// 正常请求的日志
+app.use(logger.successLogger);
 
 // 前后端分离API
 api(app)
@@ -112,23 +98,16 @@ api(app)
 routes(app);
 
 // 错误请求的日志
-app.use(expressWinston.errorLogger({
-    transports: [
-        new winston.transports.Console({
-            json: true,
-            colorize: true
-        }),
-        new winston.transports.File({
-            filename: 'logs/error.log'
-        })
-    ]
-}));
+app.use(logger.errorLogger);
 
 // error page
 app.use(function (err, req, res, next) {
     if(err.code === 'EBADCSRFTOKEN') {
         console.log('CSRF验证不通过');
-        res.send("Don't mess with me, please");
+        res.send(CODE.BAD_REQ);
+    } else if(err.message.indexOf('Unexpected token') !== -1 && err.stack.indexOf('JSONParser') !== -1) {
+        console.log('JSON 不安全数据，无法解析')
+        res.send(CODE.BAD_REQ);
     } else {
         console.log('我是错误处理器');
         emailService.emailError('我是错误处理器', err.stack, err.message)

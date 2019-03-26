@@ -1,4 +1,4 @@
-var CODE = require('../api/constant')
+var CODE = require('../constant')
 
 module.exports = {
     checkLogin: function checkLogin(req, res, next) {
