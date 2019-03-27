@@ -10,10 +10,10 @@ expressWinston.requestWhitelist.push('fields')
 function dailyRotateFileTransport(fileName) {
     return new winston.transports.DailyRotateFile({
         filename: path.join(LOGPATH, `${fileName}-%DATE%.log`),
-        datePattern: 'YYYY-MM-DD-HH',
-        zippedArchive: true,
-        maxSize: '20m',
-        maxFiles: '1d'
+        datePattern: 'YYYY-MM-DD', // 分隔设置，这里设置为按天
+        zippedArchive: true, // 旧日志打包
+        maxSize: '20m', // 超过多少大小日志将被分隔
+        // maxFiles: '1d' // 决定最多保存多少天或者多少文件个数的日志，超过的将删除旧的，不设置不删除
     })
 }
 
