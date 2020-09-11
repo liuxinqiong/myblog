@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var crypto = require('crypto')
 
-router.get('validate', function(req, res) {
+router.get('/validate', function(req, res) {
   // 1. 获取微信服务器 Get 请求的参数 signature、timestamp、nonce、echostr
   var signature = req.query.signature, // 微信加密签名
     timestamp = req.query.timestamp, // 时间戳
