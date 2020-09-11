@@ -26,4 +26,4 @@ router.get('/validate', function(req, res) {
   }
 })
 
-module.export = router
+module.exports = router
