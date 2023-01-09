@@ -213,7 +213,7 @@ module.exports = {
     var query = {}
     if (keyword) {
       var pattern = new RegExp(keyword, 'i')
-      query.title = pattern
+      query.$or = [{ title: pattern }, { content: pattern }]
     }
     if (!isLogin) {
       // 非登录只能看非私有
