@@ -19,6 +19,7 @@
   "repository": "https://github.com/liuxinqiong/myblog",
   "dependencies": {
     "axios": "^0.18.0",
+    "form-data": "4.0.0",
     "browser-sync": "^2.18.12",
     "cluster": "^0.7.7",
     "config-lite": "^2.0.0",
