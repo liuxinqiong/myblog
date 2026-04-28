@@ -1,10 +1,10 @@
 {
-  "name": "blog.pig1024.me",
+  "name": "blog",
   "title": "Ethan | 博客",
   "version": "1.0.0",
   "description": "Ethan的博客，欢迎访问交流",
   "main": "index.js",
-  "website": "pig1024.me",
+  "website": "wishbp.com",
   "keywords": "Ethan,liuxinqiong,技术生活博客",
   "scripts": {
     "test": "node --harmony ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha",
