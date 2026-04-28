@@ -1,7 +1,6 @@
 /**
  * Created by sky on 2017/5/13.
  */
-var fs = require('fs');
 var path = require('path');
 var sha1 = require('sha1');
 var express = require('express');
@@ -9,6 +8,7 @@ var router = express.Router();
 
 var UserModel = require('../models/users');
 var checkNotLogin = require('../middlewares/check').checkNotLogin;
+var imageFile = require('../lib/image-file');
 
 // GET /signup 注册页
 router.get('/', checkNotLogin, function (req, res, next) {
@@ -20,7 +20,8 @@ router.post('/', checkNotLogin, function (req, res, next) {
     var name = req.fields.name;
     var gender = req.fields.gender;
     var bio = req.fields.bio;
-    var avatar = req.files.avatar.path.split(path.sep).pop();
+    var avatarFile = req.files.avatar || {};
+    var avatar = avatarFile.path ? avatarFile.path.split(path.sep).pop() : '';
     var password = req.fields.password;
     var repassword = req.fields.repassword;
 
@@ -35,8 +36,11 @@ router.post('/', checkNotLogin, function (req, res, next) {
         if (!(bio.length >= 1 && bio.length <= 30)) {
             throw new Error('个人简介请限制在 1-30 个字符');
         }
-        if (!req.files.avatar.name) {
+        if (!avatarFile.name) {
             throw new Error('缺少头像');
+        }
+        if (!imageFile.isAllowedImage(avatarFile)) {
+            throw new Error('头像只能上传图片');
         }
         if (password.length < 6) {
             throw new Error('密码至少 6 个字符');
@@ -46,7 +50,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
         }
     } catch (e) {
         // 注册失败，异步删除上传的头像
-        fs.unlink(req.files.avatar.path);
+        imageFile.removeFile(avatarFile);
         req.flash('error', e.message);
         return res.redirect('/signup');
     }
@@ -77,7 +81,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
         })
         .catch(function (e) {
             // 注册失败，异步删除上传的头像
-            fs.unlink(req.files.avatar.path);
+            imageFile.removeFile(avatarFile);
             // 用户名被占用则跳回注册页，而不是错误页
             if (e.message.match('E11000 duplicate key')) {
                 req.flash('error', '用户名已被占用');

@@ -65,9 +65,13 @@ $(document).ready(function () {
     }
     if (e.type == "drop") {
       that.removeClass("dragenter");
-      files = event.dataTransfer.files;
+      var files = e.originalEvent.dataTransfer.files;
       var tipStr = "![Uploading ";
       for (var i = 0; i < files.length; i++) {
+        if (!checkIsImage(files[i].name)) {
+          alert("只能上传图片文件");
+          return;
+        }
         var tagCount = tagCounter.getAvailableCount();
         tipStr = tipStr + files[i].name + "_" + tagCount;
         formData.append("file" + i, files[i]);

@@ -19,6 +19,7 @@ var badContentType = require('./middlewares/bad-content-type')
 var cors = require('./middlewares/cors')
 const CODE = require('./constant')
 const logger = require('./middlewares/logger')
+var imageFile = require('./lib/image-file')
 
 var app = express();
 
@@ -61,10 +62,34 @@ app.use(flash());
 
 app.use(badContentType)
 
+function isMultipart(req) {
+    return (req.headers['content-type'] || '').toLowerCase().indexOf('multipart/form-data') !== -1;
+}
+
+function rejectMultipart(req, res) {
+    if (req.path.indexOf('/api/') === 0) {
+        return res.json({
+            code: req.session.user ? CODE.BAD_REQ : CODE.NOT_LOGIN,
+            data: req.session.user ? 'INVALID_UPLOAD_ROUTE' : 'NOT LOGIN'
+        });
+    }
+    req.flash('error', req.session.user ? '非法上传请求' : '请先登录');
+    return res.redirect(req.session.user ? 'back' : '/signin');
+}
+
+// formidable 会在路由校验前把 multipart 文件写入磁盘，先在这里挡住未授权/未知上传入口。
+app.use(function (req, res, next) {
+    if (!isMultipart(req)) return next();
+    if (req.path === '/signup') return next();
+    if (req.path === '/api/common/upload' && req.session.user) return next();
+    return rejectMultipart(req, res);
+});
+
 // 处理表单及文件上传的中间件,本质使用formidable，进行了简单中间件处理
 app.use(require('./middlewares/express-formidable')({
     uploadDir: path.join(__dirname, 'public/img'), // 上传文件目录
-    keepExtensions: true // 保留后缀
+    keepExtensions: true, // 保留后缀
+    maxFileSize: imageFile.maxFileSize
 }));
 
 // 设置模板全局常量
