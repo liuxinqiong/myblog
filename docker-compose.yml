@@ -10,6 +10,8 @@ services:
       REDIS_PORT: 6379
       SESSION_SECRET: ${SESSION_SECRET}
       SESSION_KEY: ${SESSION_KEY:-myblog}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASS: ${MAIL_PASS}
     ports:
       - "8899:8899"
     volumes:
